@@ -1,0 +1,63 @@
+generated: '2026-08-17'
+method: searched
+source: https://pypi.org/pypi/pyannoteai-sdk/json + https://github.com/pyannote
+packages:
+- language: python
+  registry: pypi
+  name: pyannoteai-sdk
+  url: https://pypi.org/project/pyannoteai-sdk/
+  source_code: https://github.com/pyannote/pyannoteAI-python-sdk
+  install: pip install pyannoteai-sdk
+  official: true
+  version: 0.4.0
+  published: '2026-01-14'
+  note: >-
+    Official pyannoteAI Python SDK — the first-party client for the hosted REST API. Authored by
+    Hervé BREDIN <herve@pyannote.ai> (pyannoteAI founder) and published from the company's own
+    GitHub org. Releases to date: 0.1.0, 0.1.1, 0.2.0, 0.2.1, 0.2.2, 0.3.0, 0.4.0. NOTE: the latest
+    release (2026-01-14) predates the streaming /v1/live surface and the AsyncAPI WebSocket gateway
+    documented by the provider, so the SDK does not appear to cover the full current API surface.
+- language: python
+  registry: pypi
+  name: pyannote.audio
+  url: https://pypi.org/project/pyannote.audio/
+  source_code: https://github.com/pyannote/pyannote-audio
+  install: pip install pyannote.audio
+  official: true
+  version: 4.0.7
+  published: '2026-06-30'
+  note: >-
+    The open-source speaker-diarization toolkit pyannoteAI commercializes (10.4k GitHub stars). This is
+    a local model/pipeline library, NOT a client for the hosted API — it is listed here because it is
+    genuinely first-party (same GitHub org, maintained by the founder) and is the primary way most
+    developers first encounter pyannote. Do not count it as an API SDK.
+registries_checked:
+- registry: pypi
+  found:
+  - pyannoteai-sdk
+  - pyannote.audio
+- registry: npm
+  found: []
+  note: >-
+    Probed registry.npmjs.org for "pyannoteai", "@pyannote/sdk" and "pyannote" — all 404. The marketing
+    site advertises "TypeScript" integration, but that refers to hand-written fetch examples in the
+    docs, not a published npm client library.
+- registry: maven-central
+  found: []
+- registry: nuget
+  found: []
+- registry: pkg.go.dev
+  found: []
+- registry: rubygems
+  found: []
+- registry: packagist
+  found: []
+- registry: crates.io
+  found: []
+summary:
+  official_api_sdks: 1
+  languages:
+  - python
+  gap: >-
+    Only one first-party API client library (Python) exists. There is no JavaScript/TypeScript, Go,
+    Java, Ruby, PHP or Rust SDK despite the docs showing cURL and TypeScript request examples.

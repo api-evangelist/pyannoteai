@@ -1,0 +1,218 @@
+asyncapi: '3.0.0'
+info:
+  title: pyannoteAI WebSocket Gateway API
+  version: '0.0.1-beta'
+  description: Streaming WebSocket gateway for real-time speaker diarization.
+  termsOfService: https://www.pyannote.ai/terms-of-use
+  contact:
+    name: pyannoteAI Support
+    url: https://pyannote.ai/
+    email: support@pyannote.ai
+  externalDocs:
+    description: Find more info here
+    url: https://docs.pyannote.ai
+channels:
+  root:
+    address: <generated url from /v1/live endpoint>
+    bindings:
+      ws:
+        query:
+          type: object
+          description: >
+            The token is embedded in the WebSocket URL returned by the
+            POST /v1/live REST endpoint. It is single-use and grants access
+            only to this stream session — it carries no team credentials or API key.
+          properties:
+            token:
+              type: string
+              description: Single-use temporary token generated when creating a stream session via POST /v1/live.
+    messages:
+      binaryAudioChunk:
+        $ref: '#/components/messages/binaryAudioChunk'
+      endOfStream:
+        $ref: '#/components/messages/endOfStream'
+      diarizationSpeakerStart:
+        $ref: '#/components/messages/diarizationSpeakerStart'
+      diarizationSpeakerEnd:
+        $ref: '#/components/messages/diarizationSpeakerEnd'
+      error:
+        $ref: '#/components/messages/error'
+operations:
+  sendAudioChunk:
+    action: receive
+    summary: Stream a raw PCM audio chunk to the server.
+    description: >
+      Send 100 ms of raw PCM audio as a binary WebSocket frame. Audio must be
+      PCM float 32-bit little-endian (pcm_f32le), 16 kHz, mono. Do not include
+      any file headers (e.g. WAV/RIFF headers). The server enforces a maximum
+      5-second buffer; sending audio faster than real-time will close the
+      connection.
+    channel:
+      $ref: '#/channels/root'
+    messages:
+      - $ref: '#/channels/root/messages/binaryAudioChunk'
+  sendEndOfStream:
+    action: receive
+    summary: Signal that no more audio will be sent.
+    description: >
+      Send this JSON text frame when you have finished streaming audio. The
+      server will finalize diarization, emit any remaining events, and close
+      the connection with code 1000 (normal closure). Do not send further audio
+      frames after this message. Using this is recommended over abruptly closing
+      the socket, which may cause final events to be lost.
+    channel:
+      $ref: '#/channels/root'
+    messages:
+      - $ref: '#/channels/root/messages/endOfStream'
+  receiveSpeakerStart:
+    action: send
+    summary: A speaker begins a turn.
+    channel:
+      $ref: '#/channels/root'
+    messages:
+      - $ref: '#/channels/root/messages/diarizationSpeakerStart'
+  receiveSpeakerEnd:
+    action: send
+    summary: A speaker's turn ends.
+    channel:
+      $ref: '#/channels/root'
+    messages:
+      - $ref: '#/channels/root/messages/diarizationSpeakerEnd'
+  receiveError:
+    action: send
+    summary: The server encountered a problem processing a frame.
+    channel:
+      $ref: '#/channels/root'
+    messages:
+      - $ref: '#/channels/root/messages/error'
+components:
+  messages:
+    binaryAudioChunk:
+      name: binaryAudioChunk
+      summary: Raw PCM audio chunk (binary frame).
+      description: >
+        100 ms of PCM float 32-bit little-endian audio at 16 kHz mono.
+        Each chunk contains 1600 samples (6400 bytes). Send raw bytes only —
+        no container or file headers.
+      contentType: application/octet-stream
+      payload:
+        $ref: '#/components/schemas/binaryAudioChunk'
+    endOfStream:
+      name: endOfStream
+      summary: End-of-stream signal.
+      description: >
+        Sent by the client to indicate no further audio frames will follow.
+        Optional but strongly recommended to ensure all diarization events are
+        flushed before the connection closes.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/endOfStream'
+    diarizationSpeakerStart:
+      name: diarizationSpeakerStart
+      summary: Emitted when a speaker begins a turn.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/diarizationSpeakerStart'
+    diarizationSpeakerEnd:
+      name: diarizationSpeakerEnd
+      summary: Emitted when a speaker's turn ends.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/diarizationSpeakerEnd'
+    error:
+      name: error
+      summary: Emitted when the server encounters a problem processing a frame.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/error'
+  schemas:
+    binaryAudioChunk:
+      type: string
+      format: binary
+      description: >
+        Raw binary audio data. PCM float 32-bit little-endian (pcm_f32le),
+        16 kHz sample rate, mono channel, 100 ms per chunk (1600 samples / 6400 bytes).
+      examples: 
+        - <binary pcm_f32le 100ms audio chunk>
+    endOfStream:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          const: end_of_stream
+      examples:
+        - type: end_of_stream
+    diarizationSpeakerStart:
+      type: object
+      required:
+        - type
+        - data
+      properties:
+        type:
+          type: string
+          const: diarization_speaker_start
+        data:
+          type: object
+          required:
+            - timestamp
+            - speaker
+          properties:
+            timestamp:
+              type: number
+              description: Time in seconds from the start of the stream when the speaker turn began.
+              example: 1.24
+            speaker:
+              type: string
+              description: Stable label for this speaker within the session. Up to 8 speakers are tracked simultaneously.
+              example: SPEAKER_00
+      examples:
+        - type: diarization_speaker_start
+          data:
+            timestamp: 1.24
+            speaker: SPEAKER_00
+    diarizationSpeakerEnd:
+      type: object
+      required:
+        - type
+        - data
+      properties:
+        type:
+          type: string
+          const: diarization_speaker_end
+        data:
+          type: object
+          required:
+            - timestamp
+            - speaker
+          properties:
+            timestamp:
+              type: number
+              description: Time in seconds from the start of the stream when the speaker turn ended.
+              example: 3.86
+            speaker:
+              type: string
+              description: Stable label for this speaker within the session.
+              example: SPEAKER_00
+      examples:
+        - type: diarization_speaker_end
+          data:
+            timestamp: 3.863
+            speaker: SPEAKER_00
+    error:
+      type: object
+      required:
+        - type
+        - message
+      properties:
+        type:
+          type: string
+          const: error
+        message:
+          type: string
+          description: Human-readable description of the error.
+          example: Invalid chunk size
+      examples:
+        - type: error
+          message: Invalid chunk size

@@ -1,0 +1,70 @@
+generated: '2026-08-17'
+method: searched
+source: https://docs.pyannote.ai/ + openapi/pyannoteai-api-openapi.yml
+versioning:
+  scheme: uri-path
+  current: v1
+  docs: https://docs.pyannote.ai/api-reference/test
+  note: >-
+    Endpoints are served under /v1/ with one exception: the team job list is GET /v2/jobs
+    (operationId getJobsByTeamV2), versioned forward on its own. No published policy explains the split
+    or the fate of any /v1 jobs-list predecessor.
+  spec_version_field: >-
+    info.version in the published OpenAPI is the literal string "local", not a release identifier — the
+    spec carries no usable version number for change tracking.
+  asyncapi_version: 0.0.1-beta
+  asyncapi_note: >-
+    The streaming WebSocket gateway is explicitly labelled beta in its own AsyncAPI info.version.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: unknown
+  note: >-
+    No deprecation policy, no sunset/deprecation notice page, and no RFC 8594 Sunset/Deprecation header
+    documented anywhere in the docs or the specs. No Deprecation pointer is emitted in apis.yml because
+    the provider publishes no such policy.
+deprecated_operations: []
+deprecated_operations_note: >-
+  Zero operations in the OpenAPI carry deprecated: true.
+changelog:
+  published: false
+  probed:
+  - url: https://docs.pyannote.ai/changelog
+    status: 404
+  - url: https://docs.pyannote.ai/changelog.md
+    status: 404
+  note: >-
+    No dated API changelog. The llms.txt documentation index lists no changelog/release-notes page. The
+    only dated change record found anywhere is the release history of the Python SDK on PyPI
+    (7 releases, latest 0.4.0 on 2026-01-14). No ChangeLog pointer is emitted.
+status_page:
+  url: https://status.pyannote.ai
+  http_status: 200
+  docs: https://docs.pyannote.ai/support/status
+  note: >-
+    Publicly reachable status page covering current service status, ongoing issues and scheduled
+    maintenance. Linked from the docs support section.
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No published uptime SLA. Enterprise plans advertise "custom limits, higher concurrency" and
+    dedicated Slack support, but no availability commitment is stated publicly.
+support:
+  faqs: https://docs.pyannote.ai/support/faqs
+  troubleshooting: https://docs.pyannote.ai/support/troubleshooting
+  email: support@pyannote.ai
+  enterprise: Dedicated Slack channel (Enterprise plan)
+data_lifecycle:
+  docs: https://docs.pyannote.ai/data-retention
+  uploaded_media_retention: 48 hours
+  job_output_retention: 24 hours
+  stream_audio_retention: none (never stored; processed on ephemeral workers)
+  stream_metadata_retention: retained for billing and debugging (model used, duration in seconds)
+  model_training: >-
+    "We never use your audio data, outputs produced by jobs or streams, or any other customer data to
+    train our AI models." Example data may be used for validation/testing only with explicit consent.
+  note: >-
+    Data retention is unusually well documented and is a genuine operational-lifecycle strength. It is
+    also an integration constraint an agent must respect: results vanish 24 hours after completion, so
+    outputs must be persisted client-side.

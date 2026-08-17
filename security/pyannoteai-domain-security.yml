@@ -1,0 +1,28 @@
+generated: '2026-08-17'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: pyannote.ai
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov 13 17:03:03 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: docs.pyannote.ai
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 20 01:51:38 2026 GMT
+  hsts: true
+  hsts_max_age: 63072000
+- host: api.pyannote.ai
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 24 12:03:38 2026 GMT
+  hsts: null
+domains:
+- domain: pyannote.ai
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine

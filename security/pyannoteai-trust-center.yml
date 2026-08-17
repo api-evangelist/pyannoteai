@@ -1,0 +1,14 @@
+generated: '2026-08-17'
+method: searched
+probe: true
+source: https://trust.pyannote.ai/
+url: https://trust.pyannote.ai/
+certifications:
+- HIPAA
+- GDPR
+evidence:
+- source: https://trust.pyannote.ai/
+  keywords:
+  - hipaa
+  - trust center
+  - gdpr

@@ -1,0 +1,95 @@
+generated: '2026-08-17'
+method: probed
+source: live GET probes of every apis.yml host and every OpenAPI servers[] host
+hosts_probed:
+- https://pyannote.ai
+- https://api.pyannote.ai
+- https://docs.pyannote.ai
+documents:
+- host: docs.pyannote.ai
+  path: /.well-known/agent-card.json
+  status: 200
+  content_type: application/json
+  file: ../a2a/pyannoteai-agent-card.json
+  note: >-
+    The ONLY /.well-known/ document served anywhere on pyannoteAI's hosts. A real A2A Agent Card, saved
+    verbatim under a2a/ and graded in a2a/pyannoteai-a2a.yml.
+- host: pyannote.ai
+  path: /.well-known/security.txt
+  status: 404
+- host: pyannote.ai
+  path: /.well-known/openid-configuration
+  status: 404
+- host: pyannote.ai
+  path: /.well-known/oauth-authorization-server
+  status: 404
+- host: pyannote.ai
+  path: /.well-known/oauth-protected-resource
+  status: 404
+- host: pyannote.ai
+  path: /.well-known/api-catalog
+  status: 404
+- host: pyannote.ai
+  path: /.well-known/ai-plugin.json
+  status: 404
+- host: pyannote.ai
+  path: /.well-known/agent-card.json
+  status: 404
+- host: pyannote.ai
+  path: /.well-known/agent.json
+  status: 404
+- host: api.pyannote.ai
+  path: /.well-known/security.txt
+  status: 404
+- host: api.pyannote.ai
+  path: /.well-known/openid-configuration
+  status: 404
+- host: api.pyannote.ai
+  path: /.well-known/oauth-authorization-server
+  status: 404
+- host: api.pyannote.ai
+  path: /.well-known/oauth-protected-resource
+  status: 404
+- host: api.pyannote.ai
+  path: /.well-known/api-catalog
+  status: 404
+- host: api.pyannote.ai
+  path: /.well-known/ai-plugin.json
+  status: 404
+- host: api.pyannote.ai
+  path: /.well-known/agent-card.json
+  status: 404
+- host: api.pyannote.ai
+  path: /.well-known/agent.json
+  status: 404
+- host: docs.pyannote.ai
+  path: /.well-known/security.txt
+  status: 404
+- host: docs.pyannote.ai
+  path: /.well-known/openid-configuration
+  status: 404
+- host: docs.pyannote.ai
+  path: /.well-known/oauth-authorization-server
+  status: 404
+- host: docs.pyannote.ai
+  path: /.well-known/oauth-protected-resource
+  status: 404
+- host: docs.pyannote.ai
+  path: /.well-known/api-catalog
+  status: 404
+- host: docs.pyannote.ai
+  path: /.well-known/ai-plugin.json
+  status: 404
+- host: docs.pyannote.ai
+  path: /.well-known/agent.json
+  status: 404
+summary:
+  hits: 1
+  misses: 23
+  security_txt: false
+  api_catalog: false
+  oauth_metadata: false
+  note: >-
+    No RFC 9116 security.txt is served on any host, so no SecurityTxt pointer is emitted. No
+    /.well-known/api-catalog and no OAuth/OIDC discovery metadata — consistent with the API being
+    bearer-API-key authenticated with no OAuth surface.

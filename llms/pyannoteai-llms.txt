@@ -1,0 +1,51 @@
+# pyannoteAI
+
+## Docs
+
+- [Welcome to pyannoteAI](https://docs.pyannote.ai/introduction.md)
+- [Quickstart guide](https://docs.pyannote.ai/quickstart.md): Get started with the pyannoteAI API in 5 minutes
+- [Models](https://docs.pyannote.ai/models.md): Choose the right speaker diarization model for your audio processing needs
+- [Feature overview](https://docs.pyannote.ai/features.md): Explore the key features of the pyannoteAI API
+- [Data retention](https://docs.pyannote.ai/data-retention.md): Understanding our data lifecycle and deletion policies.
+- [How to diarize an audio file](https://docs.pyannote.ai/tutorials/how-to-diarize-audio.md): This tutorial shows how to diarize an audio file using the pyannoteAI API
+- [How to diarize live audio](https://docs.pyannote.ai/tutorials/streaming-real-time.md): Learn how to get real-time insights into your conversations with our streaming diarization API.
+- [STT Orchestration: Speech-to-text with speaker diarization](https://docs.pyannote.ai/tutorials/speech-to-text-diarization.md): Learn how to get transcribed speaker segments with automatic speech recognition and diarization in a single API call.
+- [How to use the pyannoteAI API playground](https://docs.pyannote.ai/tutorials/api-playground.md): Learn how to use the pyannoteAI API playground to test speaker diarization, speaker identification, and speech-to-text orchestration without writing code.
+- [Upload audio files](https://docs.pyannote.ai/tutorials/how-to-upload-files.md): This tutorial shows how to upload your files to a temporary location to run jobs like diarization
+- [How to identify speakers with voiceprints](https://docs.pyannote.ai/tutorials/identification-with-voiceprints.md): This tutorial shows how to create voiceprints and identify speakers using the pyannoteAI API
+- [Confidence scores](https://docs.pyannote.ai/tutorials/confidence-scores.md): Understanding and using confidence scores for diarization quality assessment and human-in-the-loop correction.
+- [Configuring the number of speakers](https://docs.pyannote.ai/tutorials/speaker-configuration.md): Learn how to configure speaker detection and handle overlapping speech in diarization tasks.
+- [Use AWS S3 private objects](https://docs.pyannote.ai/tutorials/use-s3-private-files.md): This tutorial shows how to use signed urls to create jobs with private objects stored in AWS S3
+- [How to merge Diarization and STT results](https://docs.pyannote.ai/tutorials/diarization-asr-merge.md): Learn how to combine diarization results with automatic speech recognition to get transcribed speaker segments.
+- [Streaming diarized transcription with OpenAI](https://docs.pyannote.ai/tutorials/streaming-diarized-transcription.md): Learn how to combine pyannoteAI streaming diarization with OpenAI realtime transcription to print speaker-attributed transcripts live.
+- [Receiving Webhooks](https://docs.pyannote.ai/webhooks/receiving-webhooks.md)
+- [Verifying Webhooks](https://docs.pyannote.ai/webhooks/verifying-webhooks.md)
+- [FAQs](https://docs.pyannote.ai/support/faqs.md): Common questions and answers.
+- [Troubleshooting](https://docs.pyannote.ai/support/troubleshooting.md): Common issues and how to solve them.
+- [Status](https://docs.pyannote.ai/support/status.md)
+- [Account](https://docs.pyannote.ai/administration/account.md): Create your pyannoteAI account and manage account and team settings.
+- [Billing](https://docs.pyannote.ai/administration/billing.md): Understand how pyannoteAI billing works for diarization, identification, voiceprint jobs, and streaming.
+- [Authentication](https://docs.pyannote.ai/authentication.md)
+- [Rate Limits](https://docs.pyannote.ai/ratelimits.md)
+- [OpenAPI specification](https://docs.pyannote.ai/openapi.md)
+- [Test API Key](https://docs.pyannote.ai/api-reference/test.md)
+- [Submit Diarization Job](https://docs.pyannote.ai/api-reference/diarize.md)
+- [Submit Voiceprint Job](https://docs.pyannote.ai/api-reference/voiceprint.md)
+- [Submit Identification Job](https://docs.pyannote.ai/api-reference/identify.md)
+- [Get Job](https://docs.pyannote.ai/api-reference/get-job.md)
+- [List Jobs](https://docs.pyannote.ai/api-reference/list-jobs.md)
+- [Create Stream](https://docs.pyannote.ai/api-reference/create-stream.md)
+- [Get Stream Status](https://docs.pyannote.ai/api-reference/get-stream.md)
+- [Stream audio](https://docs.pyannote.ai/api-reference/streaming.md)
+- [Upload Media File](https://docs.pyannote.ai/api-reference/upload-media.md): To use the provided temporary storage is a two step process.     You start by declaring a media:// url that you can reference in any other API calls. The response will provide a url where you can put your media. This allows you to use the media:// url as a short-cut for a temporary storage location.…
+- [Diarization](https://docs.pyannote.ai/api-reference/schemas/diarizationschema.md)
+- [Identify](https://docs.pyannote.ai/api-reference/schemas/identifyschema.md)
+- [Voiceprint](https://docs.pyannote.ai/api-reference/schemas/voiceprintschema.md)
+
+## OpenAPI Specs
+
+- [openapi](https://docs.pyannote.ai/openapi.json)
+
+## AsyncAPI Specs
+
+- [asyncapi](https://docs.pyannote.ai/asyncapi.yaml)

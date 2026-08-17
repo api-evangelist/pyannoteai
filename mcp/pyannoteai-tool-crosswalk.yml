@@ -1,0 +1,123 @@
+generated: '2026-08-17'
+method: derived
+source: mcp/pyannoteai-mcp.yml + openapi/pyannoteai-api-openapi.yml
+headline: >-
+  pyannoteAI's MCP surface and its REST surface do not overlap at all. The MCP server is a Mintlify
+  documentation-retrieval server; the REST API is the product. Zero of ten REST operations have an MCP
+  tool, and zero of three MCP tools are backed by a REST operation. An agent connected to the MCP server
+  can read about diarization but cannot perform it.
+surfaces:
+  openapi:
+    file: openapi/pyannoteai-api-openapi.yml
+    original: openapi/_original/pyannoteai-openapi.json
+    source: https://docs.pyannote.ai/openapi.json
+    server: https://api.pyannote.ai
+    operations: 10
+    gated: false
+    note: Spec is publicly fetchable; calling the operations requires a bearer API key.
+  asyncapi:
+    file: asyncapi/pyannoteai-streaming-asyncapi.yml
+    source: https://docs.pyannote.ai/asyncapi.yaml
+    operations: 5
+    note: WebSocket streaming gateway; not represented in MCP either.
+  graphql:
+    present: false
+  mcp:
+    url: https://docs.pyannote.ai/mcp
+    tools: 3
+    gated: false
+    note: Anonymous tools/list succeeded on 2026-08-17; input schemas below are the REAL published ones.
+crosswalk: []
+mcp_only:
+- tool: search_pyannote_ai
+  reason: >-
+    Documentation search over the published site. No REST operation exposes docs search — this is a
+    Mintlify platform capability, not a pyannoteAI API capability.
+- tool: query_docs_filesystem_pyannote_ai
+  reason: >-
+    Read-only virtual filesystem over documentation pages and specs. No REST equivalent.
+- tool: submit_feedback
+  reason: >-
+    Writes documentation feedback to the docs team. No REST equivalent; not part of the product API.
+rest_only:
+- capability: Batch speaker diarization
+  operations:
+  - operationId: diarize
+    method: POST
+    path: /v1/diarize
+- capability: Speaker identification with voiceprints
+  operations:
+  - operationId: voiceprint
+    method: POST
+    path: /v1/voiceprint
+  - operationId: identify
+    method: POST
+    path: /v1/identify
+- capability: Job lifecycle
+  operations:
+  - operationId: getJobById
+    method: GET
+    path: /v1/jobs/{jobId}
+  - operationId: getJobsByTeamV2
+    method: GET
+    path: /v2/jobs
+- capability: Temporary media storage
+  operations:
+  - operationId: getMediaUploadURL
+    method: POST
+    path: /v1/media/input
+  - operationId: getMediaDownloadURL
+    method: POST
+    path: /v1/media/output
+- capability: Real-time streaming diarization
+  operations:
+  - operationId: createStream
+    method: POST
+    path: /v1/live
+  - operationId: getStream
+    method: GET
+    path: /v1/live/{id}
+- capability: Connectivity check
+  operations:
+  - operationId: testKey
+    method: GET
+    path: /v1/test
+coverage:
+  mcp_tools_named: 3
+  mcp_tools_bound_to_rest: 0
+  mcp_only: 3
+  rest_operations_total: 10
+  rest_operations_with_a_tool: 0
+  rest_operations_without_a_tool: 10
+  binding_rate: 0.0
+gap:
+  summary: >-
+    The highest-leverage agent-readiness gap for pyannoteAI. The provider has a clean 10-operation
+    OpenAPI, a documented async job model and an HMAC-signed webhook callback — everything needed to
+    forge a real operational MCP server — but the only MCP endpoint it publishes is the docs search that
+    ships free with its Mintlify docs platform.
+  recommended_tools_from_openapi:
+  - tool: diarize_audio
+    rest:
+    - diarize
+  - tool: create_voiceprint
+    rest:
+    - voiceprint
+  - tool: identify_speakers
+    rest:
+    - identify
+  - tool: get_job
+    rest:
+    - getJobById
+  - tool: list_jobs
+    rest:
+    - getJobsByTeamV2
+  - tool: upload_media
+    rest:
+    - getMediaUploadURL
+  - tool: create_stream
+    rest:
+    - createStream
+  note: >-
+    Listed as a recommendation only. These tools DO NOT EXIST — they are not claimed anywhere in this
+    repo as a pyannoteAI surface.

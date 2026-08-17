@@ -1,0 +1,121 @@
+generated: '2026-08-17'
+method: derived
+source: openapi/pyannoteai-api-openapi.yml + https://docs.pyannote.ai/support/troubleshooting
+format: custom-json
+rfc9457: false
+envelope:
+  content_type: application/json
+  fields:
+  - name: requestId
+    type: string
+    format: uuid
+    required: true
+    description: Request ID — quote this when contacting support.
+  - name: message
+    type: string
+    required: true
+    description: Human-readable error message.
+  validation_variant:
+    schema: ValidationErrorResponse
+    fields:
+    - name: message
+      type: string
+      required: true
+      example: Invalid request
+    - name: errors
+      type: array
+      required: true
+      items:
+        field: string
+        message: string
+      example:
+      - field: url
+        message: Invalid URL
+  note: >-
+    No machine-readable error code and no RFC 9457 type URI. Clients must branch on the HTTP status
+    code; the message string is the only further discrimination and is not contractually stable.
+problems:
+- status: 400
+  title: Invalid request
+  schema: ValidationErrorResponse
+  description: >-
+    Request failed validation. The errors[] array names the offending field and why, e.g.
+    {field: "url", message: "Invalid URL"}.
+  remediation: Fix the named fields and resubmit. Safe to retry after correction.
+  applies_to_all_operations: true
+- status: 402
+  title: Subscription is required
+  schema: ApiError
+  description: >-
+    The team has no active subscription, has exhausted credit with no pay-as-you-go fallback, or has
+    exceeded its configured monthly budget.
+  remediation: >-
+    Check plan status and monthly budget on the billing page of https://dashboard.pyannote.ai. Not
+    retryable without a billing change.
+  applies_to_all_operations: true
+- status: 429
+  title: Too many requests
+  schema: ApiError
+  description: >-
+    Per-team, per-endpoint rate limit exceeded within the fixed 60-second window.
+  remediation: >-
+    Honour the Retry-After response header. Pace requests using X-RateLimit-Remaining and
+    X-RateLimit-Reset to avoid tripping the limit at all.
+  retryable: true
+  applies_to_all_operations: true
+coverage:
+  operations_total: 10
+  operations_with_4xx: 10
+  distinct_statuses:
+  - 400
+  - 402
+  - 429
+  note: >-
+    The spec declares exactly the same three error responses on all ten operations and declares NO 401,
+    403, 404 or 5xx responses anywhere — despite the API being bearer-authenticated (401/403 must
+    exist), having path-parameter lookups GET /v1/jobs/{jobId} and GET /v1/live/{id} (404 must exist),
+    and being an async compute service (5xx must exist). This is a documentation gap, not evidence that
+    those statuses are unreachable; an agent written only against this spec will meet undeclared errors.
+undeclared_but_expected:
+- status: 401
+  reason: Bearer API key missing or malformed — required by the declared http/bearer security scheme.
+- status: 403
+  reason: Key valid but not permitted for the team/resource.
+- status: 404
+  reason: Unknown jobId on GET /v1/jobs/{jobId} or unknown stream id on GET /v1/live/{id}.
+- status: 5xx
+  reason: Upstream/processing failure on an async compute service.
+  note: >-
+    Job-level failure is modelled in-band instead — a job that fails returns status "failed" on the job
+    object (and on the webhook) rather than an HTTP error, since submission already returned 200.
+job_level_failures:
+  mechanism: in-band job status
+  statuses:
+  - failed
+  - canceled
+  note: >-
+    A submitted job can terminate as "failed" or "canceled". No output field is present in those cases,
+    and neither is billed. Discovered by polling GET /v1/jobs/{jobId} or via the webhook callback.
+  source: https://docs.pyannote.ai/webhooks/receiving-webhooks
+webhook_delivery_failures:
+  header: x-retry-reason
+  codes:
+  - code: http_timeout
+    meaning: No response from the receiver within 10 seconds.
+  - code: too_many_redirects
+    meaning: The request was redirected more than twice.
+  - code: connection_failed
+    meaning: Could not connect to the receiver.
+  - code: ssl_error
+    meaning: Could not verify the authenticity of the receiver's SSL certificate.
+  - code: http_error
+    meaning: Receiver responded with a status outside the HTTP 200 range.
+  - code: unknown_error
+    meaning: Unclassified failure.
+  note: >-
+    These are the only genuinely enumerated, machine-readable error codes pyannoteAI publishes, and they
+    describe the CUSTOMER's endpoint failing rather than pyannoteAI's API failing.
+  source: https://docs.pyannote.ai/webhooks/receiving-webhooks
+docs:
+  troubleshooting: https://docs.pyannote.ai/support/troubleshooting
+  faqs: https://docs.pyannote.ai/support/faqs

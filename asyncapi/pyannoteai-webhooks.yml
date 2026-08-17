@@ -1,0 +1,105 @@
+generated: '2026-08-17'
+method: searched
+source: https://docs.pyannote.ai/webhooks/receiving-webhooks
+docs:
+  receiving: https://docs.pyannote.ai/webhooks/receiving-webhooks
+  verifying: https://docs.pyannote.ai/webhooks/verifying-webhooks
+surface: outbound HTTP callback on asynchronous job completion
+subscription:
+  mechanism: per-job
+  note: >-
+    There is no webhook endpoint registry or subscription API. The callback URL is supplied per job, in
+    the "webhook" field of the POST /v1/diarize, /v1/identify or /v1/voiceprint request body. A team
+    cannot register a single endpoint once and receive all events.
+  transport_requirement: HTTPS only — plain HTTP URLs are rejected.
+  options:
+  - name: webhookStatusOnly
+    type: boolean
+    default: false
+    effect: >-
+      When true, the payload contains only jobId and status; the output field is omitted. Intended for
+      large payloads.
+delivery:
+  method: POST
+  content_type: application/json
+  fires_on:
+  - succeeded
+  - failed
+  - canceled
+  does_not_fire_on:
+  - pending
+  - created
+  - running
+  note: Only terminal job statuses trigger a callback.
+events:
+- event: job.succeeded
+  trigger: A diarization, identification or voiceprint job completed successfully.
+  payload_fields:
+  - jobId
+  - status
+  - output
+  output_schemas:
+  - job_type: diarize
+    schema: DiarizationJobOutput
+    docs: https://docs.pyannote.ai/api-reference/schemas/diarizationschema
+  - job_type: identify
+    schema: IdentificationJobOutput
+    docs: https://docs.pyannote.ai/api-reference/schemas/identifyschema
+  - job_type: voiceprint
+    schema: VoiceprintJobResults
+    docs: https://docs.pyannote.ai/api-reference/schemas/voiceprintschema
+  example:
+    jobId: job_id
+    status: succeeded
+    output:
+      diarization:
+      - start: 0.0
+        end: 1.0
+        speaker: speaker_1
+- event: job.failed
+  trigger: The job terminated in failure.
+  payload_fields:
+  - jobId
+  - status
+  note: No output field is present. Failed jobs are not billed.
+- event: job.canceled
+  trigger: The job was canceled.
+  payload_fields:
+  - jobId
+  - status
+  note: No output field is present. Canceled jobs are not billed.
+security:
+  signature_header: X-Signature
+  timestamp_header: X-Request-Timestamp
+  algorithm: HMAC-SHA256
+  signed_content: 'v0:{timestamp}:{body}'
+  secret_location: dashboard Webhooks page (per team, rotatable)
+  note: >-
+    The docs prose describes X-Signature as base64-encoded, but the Python sample in the same page
+    returns hexdigest() and compares it directly to the header. Confirm the encoding against a live
+    delivery before shipping a verifier.
+retries:
+  attempts: 3
+  schedule:
+  - immediate
+  - +1 minute
+  - +5 minutes
+  attempt_header: x-retry-num
+  reason_header: x-retry-reason
+  failure_reasons:
+  - http_timeout
+  - too_many_redirects
+  - connection_failed
+  - ssl_error
+  - http_error
+  - unknown_error
+  receiver_timeout: 10 seconds
+  max_redirects: 2
+asyncapi_document:
+  present: true
+  file: asyncapi/pyannoteai-streaming-asyncapi.yml
+  covers: streaming WebSocket gateway only
+  note: >-
+    pyannoteAI publishes a real AsyncAPI 3.0.0 document, but it describes the real-time WebSocket
+    streaming gateway (POST /v1/live), NOT this webhook surface. The webhook catalog above is captured
+    from the docs because no AsyncAPI models it.

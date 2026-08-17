@@ -1,0 +1,74 @@
+generated: '2026-08-17'
+method: searched
+source: https://docs.pyannote.ai/ratelimits
+docs: https://docs.pyannote.ai/ratelimits
+limit_count: 3
+window_note: Every limit uses a fixed 60-second window and is scoped per team, per endpoint.
+limits:
+- scope: per-team-per-endpoint
+  applies_to:
+  - POST /v1/diarize
+  - POST /v1/identify
+  - POST /v1/voiceprint
+  - POST /v1/live
+  - POST /v1/media/input
+  - POST /v1/media/output
+  limit: 100
+  unit: requests
+  window: 60s
+  description: >-
+    Default limit for submitting jobs, creating streams and the media endpoints. Each endpoint has its
+    own independent 100 req/min budget.
+- scope: per-team-per-endpoint
+  applies_to:
+  - GET /v1/jobs/{jobId}
+  - GET /v2/jobs
+  limit: 300
+  unit: requests
+  window: 60s
+  description: Default limit for listing jobs or getting a job by ID.
+- scope: per-team-per-endpoint
+  plan: Enterprise
+  limit: 500
+  unit: requests
+  window: 60s
+  description: >-
+    Enterprise plans advertise "API rate limits (500 req/min)" on the pricing page, with custom limits
+    and higher concurrency negotiable.
+  source: https://www.pyannote.ai/pricing
+response_headers:
+  on_success:
+  - header: X-RateLimit-Limit
+    meaning: Maximum requests allowed in the current window.
+  - header: X-RateLimit-Remaining
+    meaning: Requests remaining in the current window.
+  - header: X-RateLimit-Reset
+    meaning: Seconds until the current window resets.
+  on_exhaustion:
+  - header: Retry-After
+    meaning: Seconds to wait before retrying.
+  note: >-
+    Uses the legacy X-RateLimit-* family rather than the IETF draft RateLimit-* headers. All three are
+    documented as present on successful responses, so an agent can pace itself without first tripping
+    a 429.
+exhaustion:
+  status: 429
+  body: '{"requestId": "<uuid>", "message": "<error message>"}'
+  spec_description: Too many requests
+  spec_source: openapi/pyannoteai-api-openapi.yml
+other_throttles:
+- kind: streaming backpressure
+  description: >-
+    The WebSocket gateway enforces a maximum 5-second audio buffer; sending audio faster than real time
+    closes the connection.
+  source: asyncapi/pyannoteai-streaming-asyncapi.yml
+- kind: budget cap
+  description: >-
+    A team that exceeds its configured monthly budget has subsequent API requests rejected. Enforcement
+    may lag.
+  source: https://docs.pyannote.ai/administration/billing
+- kind: webhook delivery retries
+  description: >-
+    Outbound webhooks retry up to 3 times (immediate, +1 minute, +5 minutes), with x-retry-num and
+    x-retry-reason headers on each attempt.
+  source: https://docs.pyannote.ai/webhooks/receiving-webhooks

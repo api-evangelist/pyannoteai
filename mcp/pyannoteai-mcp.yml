@@ -1,0 +1,112 @@
+generated: '2026-08-17'
+method: searched
+status: published
+source: https://docs.pyannote.ai/mcp
+deployment:
+  mode: remote
+  endpoint: https://docs.pyannote.ai/mcp
+  auth: none
+  verified: probed
+  note: >-
+    Verified by POSTing initialize and tools/list anonymously on 2026-08-17; both returned HTTP 200 with
+    a text/event-stream JSON-RPC response. No API key, OAuth challenge or session header was required.
+    There is no stdio/npx package — nothing to install.
+server:
+  name: pyannoteAI
+  version: 1.0.0
+  transport: http
+  protocol_version: '2025-11-25'
+  url: https://docs.pyannote.ai/mcp
+  vendor_platform: Mintlify
+  instructions: >-
+    "This Model Context Protocol server provides search and retrieval tools for the pyannoteAI site. Use
+    it to answer questions from public site content. ... Apart from the submit_feedback tool, the server
+    is read-only and scoped to pyannoteAI; it does not otherwise perform actions, mutate state, or
+    access anything beyond the published site content and these resources."
+scope:
+  kind: documentation
+  note: >-
+    IMPORTANT — this is a DOCUMENTATION-retrieval MCP server, not an API-operation server. Its three
+    tools search and read the published docs; none of them call the pyannoteAI REST API. An agent can
+    use it to learn how to diarize audio, but cannot use it to actually submit a diarization job. The
+    ten REST operations in openapi/ have no MCP tool. See mcp/pyannoteai-tool-crosswalk.yml.
+capabilities:
+  tools:
+    listChanged: true
+  resources:
+    listChanged: true
+tools:
+- name: search_pyannote_ai
+  title: Search documentation
+  description: >-
+    Search across the pyannoteAI knowledge base to find relevant information, code examples, API
+    references, and guides.
+  input_schema:
+    type: object
+    required:
+    - query
+    properties:
+      query:
+        type: string
+        description: Search query
+  annotations:
+    readOnlyHint: true
+    destructiveHint: false
+    idempotentHint: true
+    openWorldHint: false
+- name: query_docs_filesystem_pyannote_ai
+  description: >-
+    Run a read-only shell-like query (rg, grep, find, tree, ls, cat, head, tail, jq, ...) against a
+    virtualized in-memory filesystem containing only the pyannoteAI documentation pages and OpenAPI
+    specs. Stateless per call; no writes, no network.
+  input_schema:
+    type: object
+    required:
+    - command
+  annotations:
+    readOnlyHint: true
+- name: submit_feedback
+  title: Submit documentation feedback
+  description: Report an incorrect, outdated, confusing or incomplete documentation page to the docs team.
+  input_schema:
+    type: object
+    required:
+    - path
+    - feedback
+  annotations:
+    readOnlyHint: false
+  note: The only non-read-only tool on the server; it writes documentation feedback, not API state.
+resources:
+- uri: mintlify://skills/pyannote
+  name: pyannote
+  mime_type: text/markdown
+  description: >-
+    Use when building speaker diarization and identification features into voice applications, meeting
+    transcription systems, call center analytics, live captioning, or any audio processing workflow that
+    needs to determine who spoke when and identify specific speakers using voiceprints.
+  note: >-
+    Same Agent Skill advertised by the A2A agent card and served at
+    https://docs.pyannote.ai/.well-known/agent-skills/pyannote/skill.md — harvested to
+    skills/pyannoteai-pyannote-published.md.
+x-evidence:
+  fetched: '2026-08-17'
+  url: https://docs.pyannote.ai/mcp
+  method: POST
+  requests:
+  - body: '{"jsonrpc":"2.0","id":1,"method":"initialize",...}'
+    http_status: 200
+  - body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 200
+    tools_returned: 3
+  - body: '{"jsonrpc":"2.0","id":2,"method":"resources/list"}'
+    http_status: 200
+    resources_returned: 1
+  content_type: text/event-stream
+  hosts_probed_and_missed:
+  - url: https://mcp.pyannote.ai/mcp
+    status: 000
+    note: DNS does not resolve
+  - url: https://api.pyannote.ai/mcp
+    status: 404
+  - url: https://www.pyannote.ai/mcp
+    status: 404

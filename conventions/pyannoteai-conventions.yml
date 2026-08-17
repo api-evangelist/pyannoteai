@@ -1,0 +1,146 @@
+generated: '2026-08-17'
+method: searched
+source: https://docs.pyannote.ai/ + openapi/pyannoteai-api-openapi.yml
+authentication:
+  style: bearer-api-key
+  header: 'Authorization: Bearer <apikey>'
+  scope: team
+  docs: https://docs.pyannote.ai/authentication
+  detail: authentication/pyannoteai-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    NO idempotency contract. There is no Idempotency-Key header or request-id echo parameter in the
+    OpenAPI, and the docs never mention idempotency, deduplication or safe retries. Job submission
+    (POST /v1/diarize, /v1/identify, /v1/voiceprint, /v1/live) is therefore NOT safe to retry blindly —
+    a retried submission creates a second billable job. This is a real gap for agent use, since the
+    20-second minimum charge means every duplicate submission costs money. No Idempotency pointer is
+    emitted in apis.yml because none is warranted.
+  evidence:
+  - grep for "idempoten" in openapi/_original/pyannoteai-openapi.json returned 0 matches
+  - grep for "idempoten" in llms/pyannoteai-llms.txt returned 0 matches
+async_model:
+  style: submit-then-poll-or-webhook
+  submit_response: 'HTTP 200 with {jobId, status, message} (JobCreated schema)'
+  statuses:
+  - created
+  - pending
+  - running
+  - succeeded
+  - failed
+  - canceled
+  terminal_statuses:
+  - succeeded
+  - failed
+  - canceled
+  poll: GET /v1/jobs/{jobId}
+  callback: >-
+    Optional "webhook" field on the job submission body; HTTPS-only. Set webhookStatusOnly=true to
+    receive only {jobId, status} without the output payload.
+  note: >-
+    Every substantive operation is asynchronous. Results are NOT returned inline — an agent must poll
+    getJobById or receive a webhook. Job outputs are deleted 24 hours after completion.
+pagination:
+  style: cursor
+  applies_to:
+  - GET /v2/jobs
+  request_params:
+  - name: limit
+    in: query
+    type: number
+  - name: cursor
+    in: query
+    type: string
+  - name: status
+    in: query
+    type: string
+    note: filter, not pagination
+  response_fields:
+  - name: items
+    note: Array of jobs, sorted by creation date descending. Does not include output data.
+  - name: nextCursor
+    note: Pass as the "cursor" query param for the next page. Null when there are no more results.
+  source: openapi/pyannoteai-api-openapi.yml#getJobsByTeamV2
+field_expansion:
+  supported: false
+  note: >-
+    No expand/fields/include parameters. The list endpoint deliberately omits job output; the only way
+    to get output is GET /v1/jobs/{jobId}.
+metadata:
+  supported: false
+  note: No customer-defined metadata field on jobs.
+request_tracing:
+  request_id_header: null
+  request_id_field: requestId
+  note: >-
+    Errors carry a requestId (UUID) in the response body rather than in a header. There is no documented
+    request-id header on successful responses, so a client cannot correlate a successful call with a
+    support ticket the way it can a failed one.
+  example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
+versioning:
+  scheme: uri-path
+  current: v1
+  note: >-
+    Mostly /v1/. One endpoint has been versioned forward independently: the job list is GET /v2/jobs
+    (operationId getJobsByTeamV2) while everything else remains v1. There is no published deprecation
+    notice for a v1 jobs-list predecessor.
+  detail: lifecycle/pyannoteai-lifecycle.yml
+error_envelope:
+  format: custom-json
+  rfc9457: false
+  content_type: application/json
+  shape:
+    requestId: string (uuid, required)
+    message: string (required)
+  validation_shape:
+    message: string (required)
+    errors: 'array of {field, message} (required)'
+  note: >-
+    Not RFC 9457 problem+json — no type/title/status/detail/instance and no application/problem+json
+    content type. There is no machine-readable error CODE, only a human-readable message string, so an
+    agent must branch on HTTP status alone.
+  detail: errors/pyannoteai-problem-types.yml
+rate_limit_signaling:
+  headers:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  retry_after: true
+  exhaustion_status: 429
+  detail: rate-limits/pyannoteai-rate-limits.yml
+webhook_conventions:
+  signature_header: X-Signature
+  timestamp_header: X-Request-Timestamp
+  algorithm: HMAC-SHA256
+  signed_content: 'v0:{timestamp}:{body}'
+  transport: HTTPS required; plain HTTP rejected
+  retries: 3 attempts (immediate, +1 min, +5 min)
+  retry_headers:
+  - x-retry-num
+  - x-retry-reason
+  failure_codes:
+  - http_timeout
+  - too_many_redirects
+  - connection_failed
+  - ssl_error
+  - http_error
+  - unknown_error
+  docs: https://docs.pyannote.ai/webhooks/verifying-webhooks
+  note: >-
+    The verification example in the docs is internally inconsistent: the prose says base64-encode the
+    HMAC result and describes X-Signature as base64, but the Python sample returns .hexdigest() and
+    compares it directly. Implementers should confirm the encoding against a live delivery.
+media_conventions:
+  scheme: 'media://'
+  flow: >-
+    POST /v1/media/input with a media:// url returns a pre-signed URL; PUT the audio to it, then
+    reference the media:// url in any job.
+  retention: 48 hours for uploaded media; 24 hours for job outputs
+  docs: https://docs.pyannote.ai/tutorials/how-to-upload-files
+cross_references:
+  authentication: authentication/pyannoteai-authentication.yml
+  errors: errors/pyannoteai-problem-types.yml
+  lifecycle: lifecycle/pyannoteai-lifecycle.yml
+  rate_limits: rate-limits/pyannoteai-rate-limits.yml
+  events: asyncapi/pyannoteai-webhooks.yml

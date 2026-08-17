@@ -1,0 +1,102 @@
+generated: '2026-08-17'
+method: searched
+source: https://www.pyannote.ai/pricing
+docs: https://www.pyannote.ai/pricing
+currency: EUR
+billing_period: monthly
+plan_count: 3
+model: >-
+  Subscription with included monthly credit, then pay-as-you-go at the same per-unit rate. Usage is
+  metered in audio-hours for diarization/STT/identification and per-voiceprint for enrollment. Only
+  jobs reaching "succeeded" are billed; rejected, failed and canceled jobs are not.
+plans:
+- name: Developer
+  price: 19.00
+  currency: EUR
+  period: month
+  included: 'EUR 19 of usage credit per month, spendable on any endpoint'
+  overage: Pay-as-you-go at the same per-unit rates once included credit is consumed
+  audience: Solo developers building Voice AI pipelines
+  limits:
+    workspace_seats: 1
+    rate_limit: Default (100 req/min submit, 300 req/min read)
+  features:
+  - API & Playground access
+  - Streaming & Batch diarization
+  - Speaker-attributed transcripts
+  - Email support
+- name: Starter
+  price: 99.00
+  currency: EUR
+  period: month
+  recommended: true
+  included: 'EUR 99 of usage credit per month, spendable on any endpoint'
+  overage: Pay-as-you-go at the same per-unit rates once included credit is consumed
+  audience: Small teams integrating speaker AI into workflows
+  limits:
+    workspace_seats: 3
+    rate_limit: Default (100 req/min submit, 300 req/min read)
+  features:
+  - API & Playground access
+  - Streaming & Batch diarization
+  - Speaker-attributed transcripts
+  - Email support
+- name: Enterprise
+  price: null
+  currency: EUR
+  period: null
+  pricing_model: Volume-based, contact sales
+  audience: Large organizations requiring scale, security, and deployment control
+  limits:
+    rate_limit: 500 req/min
+    concurrency: Higher concurrency, custom limits negotiable
+  features:
+  - On-premise deployment available
+  - Custom limits and higher concurrency
+  - Dedicated Slack support
+  - Early feature access
+unit_rates:
+- item: Diarization (Precision-2, batch)
+  price: 0.112
+  currency: EUR
+  unit: audio-hour
+- item: STT Orchestration (speech-to-text with diarization)
+  price: 0.168
+  currency: EUR
+  unit: audio-hour
+- item: Speaker Identification
+  price: 0.015
+  currency: EUR
+  unit: audio-hour
+- item: Voiceprint creation
+  price: null
+  currency: EUR
+  unit: voiceprint
+  note: >-
+    Billed per voiceprint created rather than by audio duration; the per-unit rate is not published on
+    the pricing page. The docs direct customers to the dashboard plan page as the source of truth for
+    current per-unit rates.
+trial:
+  available: true
+  length_days: 30
+  included: 150 hours of diarization + 10 voiceprints per month
+billing_rules:
+- rule: minimum charge
+  detail: >-
+    20-second minimum for every successful /diarize, /identify and /live job. An 8-second job bills as
+    20 seconds; a 182-second job bills as 182 seconds.
+  source: https://docs.pyannote.ai/administration/billing
+- rule: failed jobs are free
+  detail: Rejected submissions, failed jobs and canceled jobs are not billed.
+- rule: transcription pricing
+  detail: >-
+    Enabling transcription on /diarize bills the job at the STT Orchestration rate; diarization segments
+    are still returned at no additional cost.
+- rule: budget cap
+  detail: >-
+    A monthly budget with email alert thresholds can be set on the billing page; exceeding it causes
+    subsequent API requests to be rejected, with a possible enforcement delay.
+notes: >-
+  Self-serve pricing is fully published with real numbers for two of three tiers, which is unusually
+  transparent for an AI infrastructure vendor. The dashboard, not the marketing page, is named as the
+  authoritative source for current per-unit rates.

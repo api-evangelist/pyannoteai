@@ -1,24 +1,132 @@
 aid: pyannoteai
 name: PyannoteAI
-description: 'PyannoteAI is a company surfaced as a portfolio company of serena and added to the API Evangelist
-  network as a stub for enrichment. Sector: ai-data. This profile is a lead awaiting the enrichment pipeline.'
+description: 'pyannoteAI builds speaker intelligence infrastructure for voice AI: a hosted REST and
+  WebSocket API that answers "who spoke when" (speaker diarization) and "who is speaking" (speaker
+  identification via voiceprints) for both batch audio files and live streams. The company commercializes
+  the widely adopted open-source pyannote.audio library, offering batch diarization, real-time streaming
+  diarization over a WebSocket gateway, voiceprint enrollment and matching, and speech-to-text
+  orchestration that returns speaker-attributed transcripts in a single call. Developers authenticate
+  with a bearer API key, submit asynchronous jobs, and receive results by polling or signed webhooks.'
+image: https://framerusercontent.com/images/myoVIwP9SQzshWrwvnPNrwVIn8.png
 url: https://raw.githubusercontent.com/api-evangelist/pyannoteai/refs/heads/main/apis.yml
 x-type: company
 x-source: serena-portfolio
-x-tier: stub
-x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-08-17'
 modified: '2026-08-17'
 tags:
 - Company
 - Ai Data
-apis: []
+- Speech Recognition
+- Speaker Diarization
+- Audio
+- Voice AI
+- Machine Learning
+- Transcription
+- Streaming
+- Webhooks
+apis:
+- aid: pyannoteai-api
+  name: pyannoteAI API
+  description: 'REST API for speaker diarization, speaker identification with voiceprints, and
+    speech-to-text orchestration over audio files, plus a streaming WebSocket gateway for real-time
+    diarization. Jobs are asynchronous: submit to /v1/diarize, /v1/identify or /v1/voiceprint, then poll
+    /v1/jobs/{jobId} or receive an HMAC-signed webhook. Temporary media storage is provided via
+    pre-signed upload URLs under the media:// scheme.'
+  humanURL: https://docs.pyannote.ai/
+  baseURL: https://api.pyannote.ai
+  tags:
+  - Speaker Diarization
+  - Speech Recognition
+  - Audio
+  - Streaming
+  - Voice AI
+  properties:
+  - type: OpenAPI
+    url: openapi/pyannoteai-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/_original/pyannoteai-openapi.json
+  - type: AsyncAPI
+    url: asyncapi/pyannoteai-streaming-asyncapi.yml
+  - type: Overlay
+    url: overlays/pyannoteai-api-overlay.yaml
+  - type: ToolCrosswalk
+    url: mcp/pyannoteai-tool-crosswalk.yml
+  - type: Documentation
+    url: https://docs.pyannote.ai/
+  - type: APIReference
+    url: https://docs.pyannote.ai/api-reference/test
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: TrustCenter
+  url: security/pyannoteai-trust-center.yml
+- type: DomainSecurity
+  url: security/pyannoteai-domain-security.yml
 - type: Website
   url: https://pyannote.ai/
+- type: DeveloperPortal
+  url: https://docs.pyannote.ai/
+- type: Documentation
+  url: https://docs.pyannote.ai/
+- type: APIReference
+  url: https://docs.pyannote.ai/api-reference/test
+- type: GettingStarted
+  url: https://docs.pyannote.ai/quickstart
+- type: Authentication
+  url: authentication/pyannoteai-authentication.yml
+- type: Support
+  url: https://docs.pyannote.ai/support/faqs
+- type: Blog
+  url: https://www.pyannote.ai/blog
+- type: GitHubOrganization
+  url: https://github.com/pyannote
+- type: Pricing
+  url: https://www.pyannote.ai/pricing
+- type: SignUp
+  url: https://dashboard.pyannote.ai
+- type: TermsOfService
+  url: https://pyannote.ai/terms-of-use
+- type: PrivacyPolicy
+  url: https://pyannote.ai/privacy-policy
+- type: StatusPage
+  url: https://status.pyannote.ai
+- type: TrustCenter
+  url: https://trust.pyannote.ai
+- type: Compliance
+  url: https://trust.pyannote.ai
+- type: Sandbox
+  url: sandbox/pyannoteai-sandbox.yml
+- type: Packages
+  url: packages/pyannoteai-packages.yml
+- type: SDKs
+  url: packages/pyannoteai-packages.yml
+- type: MCPServer
+  url: mcp/pyannoteai-mcp.yml
+- type: AgentCard
+  url: a2a/pyannoteai-a2a.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/pyannoteai-llms.txt
+- type: WellKnown
+  url: well-known/pyannoteai-well-known.yml
+- type: Webhooks
+  url: asyncapi/pyannoteai-webhooks.yml
+- type: Conventions
+  url: conventions/pyannoteai-conventions.yml
+- type: ErrorCatalog
+  url: errors/pyannoteai-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/pyannoteai-lifecycle.yml
+- type: Conformance
+  url: conformance/pyannoteai-conformance.yml
+- type: DataModel
+  url: data-model/pyannoteai-data-model.yml
+- type: RateLimits
+  url: rate-limits/pyannoteai-rate-limits.yml
+- type: Plans
+  url: plans/pyannoteai-plans-pricing.yml

@@ -1,0 +1,44 @@
+generated: '2026-08-17'
+method: searched
+source: https://docs.pyannote.ai/authentication
+docs: https://docs.pyannote.ai/authentication
+summary:
+  types:
+  - http
+  api_key_in:
+  - header
+  oauth2_flows: []
+schemes:
+- name: api-key
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/pyannoteai-api-openapi.yml
+  docs: https://docs.pyannote.ai/authentication
+  note: >-
+    Every REST endpoint is authenticated with the team API key presented as a bearer token in the
+    Authorization header (Authorization: Bearer <apikey>). The OpenAPI declares bearerFormat JWT.
+    Keys are generated and rotated in the dashboard at https://dashboard.pyannote.ai. There is no
+    OAuth 2.0 / OpenID Connect surface, so no scopes/ artifact is emitted.
+credentials:
+  issuance: https://dashboard.pyannote.ai
+  scope: team
+  rotation: self-service in the dashboard
+additional_credentials:
+- name: stream session token
+  type: url-embedded single-use token
+  where: query parameter on the WebSocket URL returned by POST /v1/live
+  source: asyncapi/pyannoteai-streaming-asyncapi.yml
+  note: >-
+    The streaming WebSocket gateway is NOT authenticated with the team API key. POST /v1/live returns a
+    generated WebSocket URL carrying a single-use token that grants access only to that stream session
+    and carries no team credentials. Documented verbatim in the provider's AsyncAPI channel bindings.
+- name: webhook signing secret
+  type: shared secret (HMAC-SHA256)
+  where: X-Signature + X-Request-Timestamp request headers on inbound webhooks
+  docs: https://docs.pyannote.ai/webhooks/verifying-webhooks
+  note: >-
+    Per-team secret used to verify pyannoteAI -> customer webhook callbacks. Signed content is
+    "v0:{timestamp}:{body}" hashed with HMAC-SHA256 and compared against X-Signature. Rotatable from the
+    dashboard Webhooks page.
