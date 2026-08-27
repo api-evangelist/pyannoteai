@@ -37,30 +37,54 @@ tags_raw:
 - Streaming
 - Webhooks
 apis:
-- aid: pyannoteai-api
-  name: pyannoteAI API
-  description: 'REST API for speaker diarization, speaker identification with voiceprints, and
-    speech-to-text orchestration over audio files, plus a streaming WebSocket gateway for real-time
-    diarization. Jobs are asynchronous: submit to /v1/diarize, /v1/identify or /v1/voiceprint, then poll
-    /v1/jobs/{jobId} or receive an HMAC-signed webhook. Temporary media storage is provided via
-    pre-signed upload URLs under the media:// scheme.'
+- aid: pyannoteai:pyannoteai-api-api
+  name: PyannoteAI API
+  description: The Api API from PyannoteAI — 6 operation(s) for api.
   humanURL: https://docs.pyannote.ai/
   baseURL: https://api.pyannote.ai
   tags:
-  - Speaker Diarization
-  - Speech Recognition
-  - Audio
-  - Streaming
-  - Voice AI
+  - Api
   properties:
   - type: OpenAPI
-    url: openapi/pyannoteai-api-openapi.yml
-  - type: OpenAPI
-    url: openapi/_original/pyannoteai-openapi.json
+    url: openapi/pyannoteai-api-api-openapi.yml
   - type: AsyncAPI
     url: asyncapi/pyannoteai-streaming-asyncapi.yml
-  - type: Overlay
-    url: overlays/pyannoteai-api-overlay.yaml
+  - type: ToolCrosswalk
+    url: mcp/pyannoteai-tool-crosswalk.yml
+  - type: Documentation
+    url: https://docs.pyannote.ai/
+  - type: APIReference
+    url: https://docs.pyannote.ai/api-reference/test
+- aid: pyannoteai:pyannoteai-media-api
+  name: PyannoteAI Media API
+  description: The Media API from PyannoteAI — 2 operation(s) for media.
+  humanURL: https://docs.pyannote.ai/
+  baseURL: https://api.pyannote.ai
+  tags:
+  - Media
+  properties:
+  - type: OpenAPI
+    url: openapi/pyannoteai-media-api-openapi.yml
+  - type: AsyncAPI
+    url: asyncapi/pyannoteai-streaming-asyncapi.yml
+  - type: ToolCrosswalk
+    url: mcp/pyannoteai-tool-crosswalk.yml
+  - type: Documentation
+    url: https://docs.pyannote.ai/
+  - type: APIReference
+    url: https://docs.pyannote.ai/api-reference/test
+- aid: pyannoteai:pyannoteai-streaming-api
+  name: PyannoteAI Streaming API
+  description: The Streaming API from PyannoteAI — 2 operation(s) for streaming.
+  humanURL: https://docs.pyannote.ai/
+  baseURL: https://api.pyannote.ai
+  tags:
+  - Streaming
+  properties:
+  - type: OpenAPI
+    url: openapi/pyannoteai-streaming-api-openapi.yml
+  - type: AsyncAPI
+    url: asyncapi/pyannoteai-streaming-asyncapi.yml
   - type: ToolCrosswalk
     url: mcp/pyannoteai-tool-crosswalk.yml
   - type: Documentation
@@ -73,6 +97,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/pyannoteai-api-overlay.yaml
 - type: TrustCenter
   url: security/pyannoteai-trust-center.yml
 - type: DomainSecurity
