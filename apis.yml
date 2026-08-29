@@ -7,6 +7,18 @@ description: 'pyannoteAI builds speaker intelligence infrastructure for voice AI
   diarization over a WebSocket gateway, voiceprint enrollment and matching, and speech-to-text
   orchestration that returns speaker-attributed transcripts in a single call. Developers authenticate
   with a bearer API key, submit asynchronous jobs, and receive results by polling or signed webhooks.'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://framerusercontent.com/images/myoVIwP9SQzshWrwvnPNrwVIn8.png
 url: https://raw.githubusercontent.com/api-evangelist/pyannoteai/refs/heads/main/apis.yml
 x-type: company
