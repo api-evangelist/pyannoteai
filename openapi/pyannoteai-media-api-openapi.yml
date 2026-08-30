@@ -1,0 +1,170 @@
+openapi: 3.2.0
+info:
+  title: pyannoteAI Media API
+  description: ''
+  version: local
+  contact: {}
+  termsOfService: https://pyannote.ai/terms-of-use
+servers:
+- url: https://api.pyannote.ai
+tags:
+- name: Media
+paths:
+  /v1/media/input:
+    post:
+      description: "To use the provided temporary storage is a two step process.\n    You start by declaring a media:// url that you can reference in any other API calls. The response will provide a url where you can put your media. This allows you to use the media:// url as a short-cut for a temporary storage location.\n    You'll be returned a pre-signed url you can use to PUT and upload your media file. The temporary storage should allow you to read and write to the media:// locations for a period of at least 24 hours before it is removed."
+      operationId: getMediaUploadURL
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetMediaUploadUrl'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '402':
+          description: Subscription is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '429':
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - api-key: []
+      summary: Get upload URL
+      tags:
+      - Media
+      x-api-key-permissions:
+      - media:write
+  /v1/media/output:
+    post:
+      description: 'You can download media you previously uploaded with /media/input or media that was generated through another API call.
+
+        The temporary storage should allow you to read and write to the media:// locations for a period of at least 24 hours before it is removed.'
+      operationId: getMediaDownloadURL
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetMediaUploadUrl'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '402':
+          description: Subscription is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '429':
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - api-key: []
+      summary: Get download URL
+      tags:
+      - Media
+      x-api-key-permissions:
+      - media:read
+components:
+  schemas:
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+          description: Field name
+          example: url
+        message:
+          type: string
+          description: Error message
+          example: Invalid URL
+      required:
+      - field
+      - message
+    ApiError:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Request ID
+          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
+        message:
+          type: string
+          description: Error message
+          example: Error message
+      required:
+      - requestId
+      - message
+    GetMediaUploadUrl:
+      type: object
+      properties:
+        url:
+          type: string
+          maxLength: 255
+          pattern: /^media:\/\/[a-zA-Z0-9\-_\.\/]+$/
+          description: The url should be in the form media://object-key where the object-key can be any alpha-numeric string. The object-key is unique to your account API token so there is no risk of collision with other users.
+      required:
+      - url
+    MediaResponse:
+      type: object
+      properties:
+        url:
+          type: string
+      required:
+      - url
+    ValidationErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: Invalid request
+        errors:
+          description: List of errors
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+      required:
+      - message
+      - errors
+  securitySchemes:
+    api-key:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+externalDocs:
+  description: pyannoteAI Docs
+  url: https://docs.pyannote.ai/

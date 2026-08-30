@@ -1,0 +1,196 @@
+openapi: 3.2.0
+info:
+  title: pyannoteAI Streaming API
+  description: ''
+  version: local
+  contact: {}
+  termsOfService: https://pyannote.ai/terms-of-use
+servers:
+- url: https://api.pyannote.ai
+tags:
+- name: Streaming
+paths:
+  /v1/live:
+    post:
+      operationId: createStream
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStream'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamCreated'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '402':
+          description: Subscription is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '429':
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - api-key: []
+      summary: Create a new live stream
+      tags:
+      - Streaming
+      x-api-key-permissions:
+      - stream:write
+  /v1/live/{id}:
+    get:
+      operationId: getStream
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stream'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '402':
+          description: Subscription is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '429':
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - api-key: []
+      summary: Get a live stream by ID
+      tags:
+      - Streaming
+      x-api-key-permissions:
+      - stream:read
+components:
+  schemas:
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+          description: Field name
+          example: url
+        message:
+          type: string
+          description: Error message
+          example: Invalid URL
+      required:
+      - field
+      - message
+    ApiError:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Request ID
+          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
+        message:
+          type: string
+          description: Error message
+          example: Error message
+      required:
+      - requestId
+      - message
+    Stream:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          description: Status of the stream
+          example: created
+          allOf:
+          - $ref: '#/components/schemas/StreamStatus'
+        startedAt:
+          format: date-time
+          type:
+          - string
+          - 'null'
+        completedAt:
+          format: date-time
+          type:
+          - string
+          - 'null'
+        input:
+          $ref: '#/components/schemas/CreateStream'
+      required:
+      - id
+      - startedAt
+      - completedAt
+      - input
+    StreamCreated:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+      required:
+      - id
+      - url
+    ValidationErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: Invalid request
+        errors:
+          description: List of errors
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+      required:
+      - message
+      - errors
+    StreamStatus:
+      type: string
+      enum:
+      - created
+      - running
+      - done
+      - error
+      description: Status of the stream
+    CreateStream:
+      type: object
+      properties: {}
+  securitySchemes:
+    api-key:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+externalDocs:
+  description: pyannoteAI Docs
+  url: https://docs.pyannote.ai/
