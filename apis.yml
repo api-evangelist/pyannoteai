@@ -54,7 +54,8 @@ apis:
   description: The Api API from PyannoteAI — 6 operation(s) for api.
   humanURL: https://docs.pyannote.ai/
   baseURL: https://api.pyannote.ai
-  tags:
+  tags: []
+  tags_raw:
   - Api
   properties:
   - type: OpenAPI
