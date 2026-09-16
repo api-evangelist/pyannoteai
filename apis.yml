@@ -195,3 +195,5 @@ common:
   url: rate-limits/pyannoteai-rate-limits.yml
 - type: Plans
   url: plans/pyannoteai-plans-pricing.yml
+- type: Contact
+  url: mailto:support@pyannote.ai
