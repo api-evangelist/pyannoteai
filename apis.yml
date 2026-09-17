@@ -40,7 +40,7 @@ x-type: company
 x-source: serena-portfolio
 specificationVersion: '0.23'
 created: '2026-08-17'
-modified: '2026-08-17'
+modified: '2026-09-16'
 tags:
 - Company
 - Ai Data
@@ -75,6 +75,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/pyannoteai-api-api-openapi.yml
+  - type: Overlay
+    url: overlays/pyannoteai-api-api-overlay.yaml
   - type: AsyncAPI
     url: asyncapi/pyannoteai-streaming-asyncapi.yml
   - type: ToolCrosswalk
@@ -93,6 +95,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/pyannoteai-media-api-openapi.yml
+  - type: Overlay
+    url: overlays/pyannoteai-media-api-overlay.yaml
   - type: AsyncAPI
     url: asyncapi/pyannoteai-streaming-asyncapi.yml
   - type: ToolCrosswalk
@@ -111,6 +115,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/pyannoteai-streaming-api-openapi.yml
+  - type: Overlay
+    url: overlays/pyannoteai-streaming-api-overlay.yaml
   - type: AsyncAPI
     url: asyncapi/pyannoteai-streaming-asyncapi.yml
   - type: ToolCrosswalk
@@ -125,8 +131,6 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
-- type: Overlay
-  url: overlays/pyannoteai-api-overlay.yaml
 - type: TrustCenter
   url: security/pyannoteai-trust-center.yml
 - type: DomainSecurity
@@ -197,3 +201,8 @@ common:
   url: plans/pyannoteai-plans-pricing.yml
 - type: Contact
   url: mailto:support@pyannote.ai
+x-enrichment:
+  date: '2026-09-16'
+  status: enriched
+  artifacts_added: 10
+  pass: local-v3
