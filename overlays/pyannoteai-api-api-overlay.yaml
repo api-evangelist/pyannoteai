@@ -1,0 +1,59 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements to the pyannoteAI API
+  version: 1.0.0
+  x-generated: '2026-09-16'
+  x-method: generated
+  x-source: openapi/pyannoteai-api-api-openapi.yml + https://docs.pyannote.ai/llms.txt (operation descriptions
+    paraphrase the linked API reference pages)
+extends: ../openapi/pyannoteai-api-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-docs: https://docs.pyannote.ai
+    x-llms-txt: https://docs.pyannote.ai/llms.txt
+- target: $.paths['/v1/test'].get
+  description: Add documentation description and link for GET /v1/test
+  update:
+    description: Test your API key and confirm it is working correctly.
+    externalDocs:
+      description: pyannoteAI API reference
+      url: https://docs.pyannote.ai/api-reference/test
+- target: $.paths['/v1/diarize'].post
+  description: Add documentation description and link for POST /v1/diarize
+  update:
+    description: Submit an audio file for speaker diarization (who spoke when). Returns a jobId; poll
+      GET /v1/jobs/{jobId} or receive a webhook.
+    externalDocs:
+      description: pyannoteAI API reference
+      url: https://docs.pyannote.ai/api-reference/diarize
+- target: $.paths['/v1/voiceprint'].post
+  description: Add documentation description and link for POST /v1/voiceprint
+  update:
+    description: Submit a single-speaker audio file to extract a voiceprint for later speaker identification.
+    externalDocs:
+      description: pyannoteAI API reference
+      url: https://docs.pyannote.ai/api-reference/voiceprint
+- target: $.paths['/v1/identify'].post
+  description: Add documentation description and link for POST /v1/identify
+  update:
+    description: Submit an audio file plus voiceprints to diarize and match speakers against known identities.
+    externalDocs:
+      description: pyannoteAI API reference
+      url: https://docs.pyannote.ai/api-reference/identify
+- target: $.paths['/v1/jobs/{jobId}'].get
+  description: Add documentation description and link for GET /v1/jobs/{jobId}
+  update:
+    description: Retrieve the status and, once complete, the output of a diarization, voiceprint or identification
+      job.
+    externalDocs:
+      description: pyannoteAI API reference
+      url: https://docs.pyannote.ai/api-reference/get-job
+- target: $.paths['/v2/jobs'].get
+  description: Add documentation description and link for GET /v2/jobs
+  update:
+    description: List jobs for your team, newest first, with cursor pagination (limit, cursor) and an
+      optional status filter.
+    externalDocs:
+      description: pyannoteAI API reference
+      url: https://docs.pyannote.ai/api-reference/list-jobs

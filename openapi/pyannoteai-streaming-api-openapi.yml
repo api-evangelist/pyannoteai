@@ -109,20 +109,29 @@ components:
       required:
       - field
       - message
-    ApiError:
+    ValidationErrorResponse:
       type: object
       properties:
-        requestId:
-          type: string
-          description: Request ID
-          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
         message:
           type: string
           description: Error message
-          example: Error message
+          example: Invalid request
+        errors:
+          description: List of errors
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
       required:
-      - requestId
       - message
+      - errors
+    StreamStatus:
+      type: string
+      enum:
+      - created
+      - running
+      - done
+      - error
+      description: Status of the stream
     Stream:
       type: object
       properties:
@@ -160,32 +169,23 @@ components:
       required:
       - id
       - url
-    ValidationErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-          example: Invalid request
-        errors:
-          description: List of errors
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
-      required:
-      - message
-      - errors
-    StreamStatus:
-      type: string
-      enum:
-      - created
-      - running
-      - done
-      - error
-      description: Status of the stream
     CreateStream:
       type: object
       properties: {}
+    ApiError:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Request ID
+          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
+        message:
+          type: string
+          description: Error message
+          example: Error message
+      required:
+      - requestId
+      - message
   securitySchemes:
     api-key:
       scheme: bearer

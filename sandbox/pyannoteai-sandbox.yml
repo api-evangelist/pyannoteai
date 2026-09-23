@@ -1,0 +1,43 @@
+generated: '2026-09-16'
+method: searched
+source: https://docs.pyannote.ai/tutorials/api-playground
+description: pyannoteAI publishes no separate test/live mode. Testing happens against the production API
+  with real (free signup) credits, through the dashboard API playground or the GET /v1/test key-check
+  endpoint.
+docs:
+- https://docs.pyannote.ai/tutorials/api-playground
+- https://docs.pyannote.ai/administration/account
+- https://docs.pyannote.ai/api-reference/test
+- https://docs.pyannote.ai/authentication
+modes:
+- name: live
+  key_prefixes: null
+  note: Only one key type is documented; API keys are generated in the dashboard (https://dashboard.pyannote.ai).
+    No test-mode key prefix is published.
+test_mode:
+  separate_environment: false
+  note: No sandbox host or test-mode keys are documented. Playground jobs "consume your credits exactly
+    like normal API requests".
+free_credits:
+  available: true
+  amount: null
+  evidence: '"You receive free credits at signup, which can be used to run playground jobs." (docs.pyannote.ai/tutorials/api-playground).
+    The amount is not stated on that page.'
+hosted_test_surfaces:
+- name: API playground
+  url: https://dashboard.pyannote.ai/playground
+  capabilities:
+  - diarization
+  - identification
+  - speech-to-text orchestration
+  limits: Stricter rate limits than direct API usage; usage appears on the normal Usage and Billing pages.
+connectivity_check:
+  operation: testKey
+  method: GET
+  path: /v1/test
+  spec: openapi/pyannoteai-api-api-openapi.yml
+  note: '"Use it to test your API key and ensure that it is working correctly."'
+test_values: []
+test_clocks: null
+note: No test cards, fixtures or trigger tooling are published (none would apply to an audio API). Nothing
+  here is invented.

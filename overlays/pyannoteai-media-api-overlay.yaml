@@ -1,0 +1,28 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements to the pyannoteAI Media API
+  version: 1.0.0
+  x-generated: '2026-09-16'
+  x-method: generated
+  x-source: openapi/pyannoteai-media-api-openapi.yml + https://docs.pyannote.ai/llms.txt (operation descriptions
+    paraphrase the linked API reference pages)
+extends: ../openapi/pyannoteai-media-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-docs: https://docs.pyannote.ai
+    x-llms-txt: https://docs.pyannote.ai/llms.txt
+- target: $.paths['/v1/media/input'].post
+  description: Add documentation description and link for POST /v1/media/input
+  update:
+    description: Declare a media:// URL and receive a presigned URL to upload a file into temporary storage
+      for use in other API calls.
+    externalDocs:
+      description: pyannoteAI API reference
+      url: https://docs.pyannote.ai/api-reference/upload-media
+- target: $.paths['/v1/media/output'].post
+  description: Add documentation description and link for POST /v1/media/output
+  update:
+    description: Get a URL for an object in pyannoteAI temporary media storage (media:// url). No dedicated
+      API reference page is published for this operation; description paraphrases the operation summary
+      "Get download URL".

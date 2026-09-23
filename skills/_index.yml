@@ -1,0 +1,34 @@
+generated: '2026-09-16'
+method: searched
+source: >-
+  pyannoteai-pyannote-published.md is the provider's own Agent Skill, fetched verbatim from
+  https://docs.pyannote.ai/skill.md (HTTP 200, 2026-09-16) and advertised in
+  https://docs.pyannote.ai/.well-known/agent-skills/index.json (agentskills discovery 0.2.0, HTTP 200).
+  The three flow skills are generated from openapi/*.yml; every operationId was verified in the spec.
+discovery:
+  - url: https://docs.pyannote.ai/.well-known/agent-skills/index.json
+    status: 200
+  - url: https://docs.pyannote.ai/.well-known/skills/index.json
+    status: 200
+skills:
+  - file: pyannoteai-pyannote-published.md
+    name: pyannote
+    method: searched
+    source: https://docs.pyannote.ai/skill.md
+    api: openapi/pyannoteai-api-api-openapi.yml
+    operations: [diarize, identify, voiceprint, createStream, getJobById, testKey]
+  - file: pyannoteai-diarize-audio.md
+    name: Diarize an audio file
+    method: generated
+    api: openapi/pyannoteai-api-api-openapi.yml
+    operations: [getMediaUploadURL, diarize, getJobById]
+  - file: pyannoteai-identify-speakers.md
+    name: Identify speakers with voiceprints
+    method: generated
+    api: openapi/pyannoteai-api-api-openapi.yml
+    operations: [voiceprint, getJobById, identify]
+  - file: pyannoteai-stream-live-diarization.md
+    name: Stream live audio for real-time diarization
+    method: generated
+    api: openapi/pyannoteai-streaming-api-openapi.yml
+    operations: [createStream, getStream]

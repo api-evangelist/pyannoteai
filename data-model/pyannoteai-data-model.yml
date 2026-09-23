@@ -1,0 +1,104 @@
+generated: '2026-09-16'
+method: derived
+source: Derived from components.schemas $ref links and id-reference fields in openapi/pyannoteai-api-api-openapi.yml,
+  openapi/pyannoteai-media-api-openapi.yml and openapi/pyannoteai-streaming-api-openapi.yml.
+docs: https://docs.pyannote.ai/api-reference/schemas/diarizationschema
+notation: relationships use has_one / has_many / belongs_to with the field that carries the link; direction
+  is from the owning entity.
+entities:
+- name: Team
+  id_prefix: null
+  domain: account
+  description: The account scope an API key belongs to; GET /v2/jobs lists a team's jobs. Not a schema
+    in the spec.
+- name: Job
+  id_prefix: null
+  domain: jobs
+  schemas:
+  - JobCreated
+  - JobListItem
+  description: An asynchronous unit of work identified by jobId, with JobStatus and createdAt/updatedAt.
+- name: DiarizationJob
+  domain: jobs
+  schemas:
+  - DiarizationJob
+  - DiarizationJobOutput
+  - DiarizationSegment
+  description: A job created by POST /v1/diarize; output holds diarization segments and optional transcription.
+- name: VoiceprintJob
+  domain: voiceprints
+  schemas:
+  - VoiceprintJob
+  - VoiceprintJobResults
+  description: A job created by POST /v1/voiceprint; output.voiceprint is the extracted voiceprint string.
+- name: IdentifyJob
+  domain: identification
+  schemas:
+  - IdentifyJob
+  - IdentificationJobOutput
+  - IdentificationSegment
+  - IdentificationVoiceprint
+  description: A job created by POST /v1/identify; matches diarized speakers to supplied voiceprints.
+- name: Voiceprint
+  domain: voiceprints
+  schemas:
+  - Voiceprint
+  description: A {label, voiceprint} pair supplied in IdentifyRequest.voiceprints. Voiceprints are not
+    stored server-side as addressable resources; the caller keeps them.
+- name: Media
+  domain: media
+  schemas:
+  - GetMediaUploadUrl
+  - MediaResponse
+  description: A media:// temporary storage object referenced by url in job requests.
+- name: Stream
+  domain: streaming
+  schemas:
+  - Stream
+  - StreamCreated
+  - CreateStream
+  - StreamStatus
+  description: A live diarization stream (id, status, startedAt, completedAt); StreamCreated returns the
+    WebSocket url.
+relationships:
+- from: Team
+  to: Job
+  kind: has_many
+  via: GET /v2/jobs items[].id
+- from: DiarizationJob
+  to: Job
+  kind: belongs_to
+  via: jobId
+  note: GET /v1/jobs/{jobId} returns oneOf DiarizationJob | VoiceprintJob | IdentifyJob
+- from: VoiceprintJob
+  to: Job
+  kind: belongs_to
+  via: jobId
+- from: IdentifyJob
+  to: Job
+  kind: belongs_to
+  via: jobId
+- from: VoiceprintJob
+  to: Voiceprint
+  kind: has_one
+  via: output.voiceprint
+- from: IdentifyJob
+  to: Voiceprint
+  kind: has_many
+  via: input voiceprints[].voiceprint (IdentifyRequest)
+- from: IdentifyJob
+  to: Voiceprint
+  kind: has_many
+  via: output IdentificationVoiceprint.match (label)
+- from: DiarizationJob
+  to: Media
+  kind: belongs_to
+  via: url (DiarizeRequest; may be a media:// url)
+- from: IdentifyJob
+  to: Media
+  kind: belongs_to
+  via: url (IdentifyRequest)
+- from: VoiceprintJob
+  to: Media
+  kind: belongs_to
+  via: url (VoiceprintRequest)

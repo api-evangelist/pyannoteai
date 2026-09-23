@@ -1,0 +1,28 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements to the pyannoteAI Streaming API
+  version: 1.0.0
+  x-generated: '2026-09-16'
+  x-method: generated
+  x-source: openapi/pyannoteai-streaming-api-openapi.yml + https://docs.pyannote.ai/llms.txt (operation
+    descriptions paraphrase the linked API reference pages)
+extends: ../openapi/pyannoteai-streaming-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-docs: https://docs.pyannote.ai
+    x-llms-txt: https://docs.pyannote.ai/llms.txt
+- target: $.paths['/v1/live'].post
+  description: Add documentation description and link for POST /v1/live
+  update:
+    description: Create a live stream and receive a WebSocket URL to stream audio for real-time diarization.
+    externalDocs:
+      description: pyannoteAI API reference
+      url: https://docs.pyannote.ai/api-reference/create-stream
+- target: $.paths['/v1/live/{id}'].get
+  description: Add documentation description and link for GET /v1/live/{id}
+  update:
+    description: Get the status of a live stream by ID.
+    externalDocs:
+      description: pyannoteAI API reference
+      url: https://docs.pyannote.ai/api-reference/get-stream

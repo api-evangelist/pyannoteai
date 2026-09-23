@@ -12,7 +12,11 @@ tags:
 paths:
   /v1/media/input:
     post:
-      description: "To use the provided temporary storage is a two step process.\n    You start by declaring a media:// url that you can reference in any other API calls. The response will provide a url where you can put your media. This allows you to use the media:// url as a short-cut for a temporary storage location.\n    You'll be returned a pre-signed url you can use to PUT and upload your media file. The temporary storage should allow you to read and write to the media:// locations for a period of at least 24 hours before it is removed."
+      description: 'To use the provided temporary storage is a two step process.
+
+        You start by declaring a media:// url that you can reference in any other API calls. The response will provide a url where you can put your media. This allows you to use the media:// url as a short-cut for a temporary storage location.
+
+        You''ll be returned a pre-signed url you can use to PUT and upload your media file. The temporary storage should allow you to read and write to the media:// locations for a period of at least 24 hours before it is removed.'
       operationId: getMediaUploadURL
       parameters: []
       requestBody:
@@ -114,20 +118,21 @@ components:
       required:
       - field
       - message
-    ApiError:
+    ValidationErrorResponse:
       type: object
       properties:
-        requestId:
-          type: string
-          description: Request ID
-          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
         message:
           type: string
           description: Error message
-          example: Error message
+          example: Invalid request
+        errors:
+          description: List of errors
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
       required:
-      - requestId
       - message
+      - errors
     GetMediaUploadUrl:
       type: object
       properties:
@@ -145,21 +150,20 @@ components:
           type: string
       required:
       - url
-    ValidationErrorResponse:
+    ApiError:
       type: object
       properties:
+        requestId:
+          type: string
+          description: Request ID
+          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
         message:
           type: string
           description: Error message
-          example: Invalid request
-        errors:
-          description: List of errors
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
+          example: Error message
       required:
+      - requestId
       - message
-      - errors
   securitySchemes:
     api-key:
       scheme: bearer

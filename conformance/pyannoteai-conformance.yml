@@ -1,0 +1,48 @@
+generated: '2026-09-16'
+method: derived
+source: Derived from openapi/*.yml (securitySchemes, error schemas, pagination params), asyncapi/pyannoteai-webhooks.yml,
+  and the trust center claims recorded in security/pyannoteai-trust-center.yml (https://trust.pyannote.ai,
+  re-fetched 2026-09-16, HTTP 200).
+standards:
+- id: http-bearer-auth
+  conforms: true
+  evidence: 'openapi securitySchemes api-key: type http, scheme bearer (RFC 6750 Authorization: Bearer
+    header); docs.pyannote.ai/authentication'
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme in any openapi/ file; docs document API keys only.
+- id: oidc
+  conforms: false
+  evidence: No openid-configuration recorded in well-known/pyannoteai-well-known.yml.
+- id: rfc9457
+  conforms: false
+  evidence: Errors are application/json ApiError {requestId, message} and ValidationErrorResponse {message,
+    errors[]}, not application/problem+json (errors/pyannoteai-problem-types.yml).
+- id: pagination
+  conforms: true
+  evidence: GET /v2/jobs (getJobsByTeamV2) takes limit + cursor and returns items + nextCursor (openapi/pyannoteai-api-api-openapi.yml).
+- id: idempotency
+  conforms: false
+  evidence: No Idempotency-Key header or dedup parameter in the spec or docs (conventions/pyannoteai-conventions.yml).
+- id: webhook-signatures
+  conforms: true
+  evidence: Webhooks carry X-Signature (HMAC-SHA256) + X-Request-Timestamp (asyncapi/pyannoteai-webhooks.yml,
+    docs.pyannote.ai/webhooks/verifying-webhooks).
+- id: asyncapi
+  conforms: true
+  evidence: Provider publishes an AsyncAPI 3.0.0 document for the WebSocket gateway (docs.pyannote.ai/asyncapi.yaml,
+    listed in llms.txt).
+- id: openapi
+  conforms: true
+  evidence: Provider publishes an OpenAPI 3.0.0 document at https://docs.pyannote.ai/openapi.json (HTTP
+    200, 2026-09-16).
+compliance:
+- id: gdpr
+  conforms: true
+  evidence: GDPR listed on https://trust.pyannote.ai (trust center, fetched 2026-09-16).
+- id: hipaa
+  conforms: true
+  evidence: HIPAA listed on https://trust.pyannote.ai (trust center, fetched 2026-09-16).
+domain_standards: []
+domain_standards_note: Speaker diarization has no interchange standard declared in the contract (the output
+  is a bespoke JSON segment list, not RTTM or another named format). None asserted.
