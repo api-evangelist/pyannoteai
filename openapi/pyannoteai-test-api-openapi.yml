@@ -1,0 +1,113 @@
+openapi: 3.2.0
+info:
+  title: pyannoteAI Test API
+  description: ''
+  version: local
+  contact: {}
+  termsOfService: https://pyannote.ai/terms-of-use
+servers:
+- url: https://api.pyannote.ai
+tags:
+- name: Test
+paths:
+  /v1/test:
+    get:
+      operationId: testKey
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '402':
+          description: Subscription is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '429':
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - api-key: []
+      summary: Test API endpoint
+      tags:
+      - Test
+components:
+  schemas:
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+          description: Field name
+          example: url
+        message:
+          type: string
+          description: Error message
+          example: Invalid URL
+      required:
+      - field
+      - message
+    TestResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the test
+          example: OK
+        message:
+          type: string
+          description: Message of the test
+          example: Test connection successful
+      required:
+      - status
+      - message
+    ApiError:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Request ID
+          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
+        message:
+          type: string
+          description: Error message
+          example: Error message
+      required:
+      - requestId
+      - message
+    ValidationErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: Invalid request
+        errors:
+          description: List of errors
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+      required:
+      - message
+      - errors
+  securitySchemes:
+    api-key:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+externalDocs:
+  description: pyannoteAI Docs
+  url: https://docs.pyannote.ai/

@@ -4,25 +4,28 @@
     "_original/pyannoteai-api-openapi.yml"
   ],
   "outputs": [
-    "pyannoteai-api-api-openapi.yml",
+    "pyannoteai-jobs-api-openapi.yml",
     "pyannoteai-media-api-openapi.yml",
-    "pyannoteai-streaming-api-openapi.yml"
+    "pyannoteai-operations-api-openapi.yml",
+    "pyannoteai-streaming-api-openapi.yml",
+    "pyannoteai-test-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [],
   "notes": [
     "1 archived document(s) dropped as subsets of other archived documents",
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "pyannoteai-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
-    "pyannoteai-api-openapi.yml: declared missing tag: Api",
     "pyannoteai-api-openapi.yml: declared missing tag: Jobs",
     "pyannoteai-api-openapi.yml: declared missing tag: Media",
     "pyannoteai-api-openapi.yml: declared missing tag: Operations",
     "pyannoteai-api-openapi.yml: declared missing tag: Streaming",
     "pyannoteai-api-openapi.yml: declared missing tag: Test",
-    "pyannoteai-api-openapi.yml: multi-axis tagging (6 tags, 3 first tags, 1.60x duplication over 10 operations) \u2014 split on first tag, 6 operations narrowed",
-    "apis.yml register: already-registered"
+    "superseded outputs removed: pyannoteai-api-api-openapi.yml",
+    "apis.yml register: written (+3 apis, 5 total)"
   ],
   "skipped": [
     "_original/pyannoteai-openapi.json: archived document superseded by a larger archived document",

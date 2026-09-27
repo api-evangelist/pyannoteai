@@ -95,43 +95,6 @@ paths:
       - stream:read
 components:
   schemas:
-    ValidationError:
-      type: object
-      properties:
-        field:
-          type: string
-          description: Field name
-          example: url
-        message:
-          type: string
-          description: Error message
-          example: Invalid URL
-      required:
-      - field
-      - message
-    ValidationErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-          example: Invalid request
-        errors:
-          description: List of errors
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
-      required:
-      - message
-      - errors
-    StreamStatus:
-      type: string
-      enum:
-      - created
-      - running
-      - done
-      - error
-      description: Status of the stream
     Stream:
       type: object
       properties:
@@ -159,6 +122,46 @@ components:
       - startedAt
       - completedAt
       - input
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+          description: Field name
+          example: url
+        message:
+          type: string
+          description: Error message
+          example: Invalid URL
+      required:
+      - field
+      - message
+    StreamStatus:
+      type: string
+      enum:
+      - created
+      - running
+      - done
+      - error
+      description: Status of the stream
+    ValidationErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: Invalid request
+        errors:
+          description: List of errors
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+      required:
+      - message
+      - errors
+    CreateStream:
+      type: object
+      properties: {}
     StreamCreated:
       type: object
       properties:
@@ -169,9 +172,6 @@ components:
       required:
       - id
       - url
-    CreateStream:
-      type: object
-      properties: {}
     ApiError:
       type: object
       properties:

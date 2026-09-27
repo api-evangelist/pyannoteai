@@ -143,13 +143,6 @@ components:
           description: The url should be in the form media://object-key where the object-key can be any alpha-numeric string. The object-key is unique to your account API token so there is no risk of collision with other users.
       required:
       - url
-    MediaResponse:
-      type: object
-      properties:
-        url:
-          type: string
-      required:
-      - url
     ApiError:
       type: object
       properties:
@@ -164,6 +157,13 @@ components:
       required:
       - requestId
       - message
+    MediaResponse:
+      type: object
+      properties:
+        url:
+          type: string
+      required:
+      - url
   securitySchemes:
     api-key:
       scheme: bearer

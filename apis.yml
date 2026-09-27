@@ -48,10 +48,12 @@ tags:
 - Speaker Diarization
 - Audio
 - Voice AI
-- Machine-Learning
+- Machine Learning
 - Transcription
 - Streaming
 - Webhook
+- Real-Time
+- A2A
 tags_raw:
 - Company
 - Ai Data
@@ -63,28 +65,10 @@ tags_raw:
 - Transcription
 - Streaming
 - Webhooks
+- Machine-Learning
+- Real-Time
+- A2A
 apis:
-- aid: pyannoteai:pyannoteai-api-api
-  name: PyannoteAI API
-  description: The Api API from PyannoteAI — 6 operation(s) for api.
-  humanURL: https://docs.pyannote.ai/
-  baseURL: https://api.pyannote.ai
-  tags: []
-  tags_raw:
-  - Api
-  properties:
-  - type: OpenAPI
-    url: openapi/pyannoteai-api-api-openapi.yml
-  - type: Overlay
-    url: overlays/pyannoteai-api-api-overlay.yaml
-  - type: AsyncAPI
-    url: asyncapi/pyannoteai-streaming-asyncapi.yml
-  - type: ToolCrosswalk
-    url: mcp/pyannoteai-tool-crosswalk.yml
-  - type: Documentation
-    url: https://docs.pyannote.ai/
-  - type: APIReference
-    url: https://docs.pyannote.ai/api-reference/test
 - aid: pyannoteai:pyannoteai-media-api
   name: PyannoteAI Media API
   description: The Media API from PyannoteAI — 2 operation(s) for media.
@@ -125,12 +109,68 @@ apis:
     url: https://docs.pyannote.ai/
   - type: APIReference
     url: https://docs.pyannote.ai/api-reference/test
+- aid: pyannoteai:pyannoteai-jobs-api
+  name: PyannoteAI Jobs API
+  description: The Jobs API from PyannoteAI — 2 operation(s) for jobs.
+  humanURL: https://docs.pyannote.ai/
+  baseURL: https://api.pyannote.ai
+  tags:
+  - Jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/pyannoteai-jobs-api-openapi.yml
+  - type: AsyncAPI
+    url: asyncapi/pyannoteai-streaming-asyncapi.yml
+  - type: ToolCrosswalk
+    url: mcp/pyannoteai-tool-crosswalk.yml
+  - type: Documentation
+    url: https://docs.pyannote.ai/
+  - type: APIReference
+    url: https://docs.pyannote.ai/api-reference/test
+- aid: pyannoteai:pyannoteai-operations-api
+  name: PyannoteAI Operations API
+  description: The Operations API from PyannoteAI — 3 operation(s) for operations.
+  humanURL: https://docs.pyannote.ai/
+  baseURL: https://api.pyannote.ai
+  tags:
+  - Operations
+  properties:
+  - type: OpenAPI
+    url: openapi/pyannoteai-operations-api-openapi.yml
+  - type: AsyncAPI
+    url: asyncapi/pyannoteai-streaming-asyncapi.yml
+  - type: ToolCrosswalk
+    url: mcp/pyannoteai-tool-crosswalk.yml
+  - type: Documentation
+    url: https://docs.pyannote.ai/
+  - type: APIReference
+    url: https://docs.pyannote.ai/api-reference/test
+- aid: pyannoteai:pyannoteai-test-api
+  name: PyannoteAI Test API
+  description: The Test API from PyannoteAI — 1 operation(s) for test.
+  humanURL: https://docs.pyannote.ai/
+  baseURL: https://api.pyannote.ai
+  tags:
+  - Test
+  properties:
+  - type: OpenAPI
+    url: openapi/pyannoteai-test-api-openapi.yml
+  - type: AsyncAPI
+    url: asyncapi/pyannoteai-streaming-asyncapi.yml
+  - type: ToolCrosswalk
+    url: mcp/pyannoteai-tool-crosswalk.yml
+  - type: Documentation
+    url: https://docs.pyannote.ai/
+  - type: APIReference
+    url: https://docs.pyannote.ai/api-reference/test
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/pyannoteai-api-api-overlay.yaml
 - type: TrustCenter
   url: security/pyannoteai-trust-center.yml
 - type: DomainSecurity
@@ -206,3 +246,10 @@ x-enrichment:
   status: enriched
   artifacts_added: 10
   pass: local-v3
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://docs.pyannote.ai/.well-known/agent-card.json"
+  grade: "conformant"
+  protocol_version: "0.3"
+  control: 404
