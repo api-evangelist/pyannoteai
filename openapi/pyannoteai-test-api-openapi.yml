@@ -46,6 +46,20 @@ paths:
       - Test
 components:
   schemas:
+    ApiError:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Request ID
+          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
+        message:
+          type: string
+          description: Error message
+          example: Error message
+      required:
+      - requestId
+      - message
     ValidationError:
       type: object
       properties:
@@ -73,20 +87,6 @@ components:
           example: Test connection successful
       required:
       - status
-      - message
-    ApiError:
-      type: object
-      properties:
-        requestId:
-          type: string
-          description: Request ID
-          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
-        message:
-          type: string
-          description: Error message
-          example: Error message
-      required:
-      - requestId
       - message
     ValidationErrorResponse:
       type: object

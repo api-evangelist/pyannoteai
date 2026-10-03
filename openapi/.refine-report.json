@@ -10,9 +10,7 @@
     "pyannoteai-streaming-api-openapi.yml",
     "pyannoteai-test-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 1 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
@@ -24,13 +22,14 @@
     "pyannoteai-api-openapi.yml: declared missing tag: Operations",
     "pyannoteai-api-openapi.yml: declared missing tag: Streaming",
     "pyannoteai-api-openapi.yml: declared missing tag: Test",
-    "superseded outputs removed: pyannoteai-api-api-openapi.yml",
-    "apis.yml register: written (+3 apis, 5 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "_original/pyannoteai-openapi.json: archived document superseded by a larger archived document",
-    "pyannoteai-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "pyannoteai-jobs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "pyannoteai-media-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "pyannoteai-streaming-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+    "pyannoteai-operations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "pyannoteai-streaming-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "pyannoteai-test-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]
 }

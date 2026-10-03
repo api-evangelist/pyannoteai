@@ -95,6 +95,55 @@ paths:
       - stream:read
 components:
   schemas:
+    StreamStatus:
+      type: string
+      enum:
+      - created
+      - running
+      - done
+      - error
+      description: Status of the stream
+    CreateStream:
+      type: object
+      properties: {}
+    StreamCreated:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+      required:
+      - id
+      - url
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+          description: Field name
+          example: url
+        message:
+          type: string
+          description: Error message
+          example: Invalid URL
+      required:
+      - field
+      - message
+    ApiError:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Request ID
+          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
+        message:
+          type: string
+          description: Error message
+          example: Error message
+      required:
+      - requestId
+      - message
     Stream:
       type: object
       properties:
@@ -122,28 +171,6 @@ components:
       - startedAt
       - completedAt
       - input
-    ValidationError:
-      type: object
-      properties:
-        field:
-          type: string
-          description: Field name
-          example: url
-        message:
-          type: string
-          description: Error message
-          example: Invalid URL
-      required:
-      - field
-      - message
-    StreamStatus:
-      type: string
-      enum:
-      - created
-      - running
-      - done
-      - error
-      description: Status of the stream
     ValidationErrorResponse:
       type: object
       properties:
@@ -159,33 +186,6 @@ components:
       required:
       - message
       - errors
-    CreateStream:
-      type: object
-      properties: {}
-    StreamCreated:
-      type: object
-      properties:
-        id:
-          type: string
-        url:
-          type: string
-      required:
-      - id
-      - url
-    ApiError:
-      type: object
-      properties:
-        requestId:
-          type: string
-          description: Request ID
-          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
-        message:
-          type: string
-          description: Error message
-          example: Error message
-      required:
-      - requestId
-      - message
   securitySchemes:
     api-key:
       scheme: bearer

@@ -138,108 +138,6 @@ paths:
       - jobs:write
 components:
   schemas:
-    VoiceprintRequest:
-      type: object
-      properties:
-        url:
-          type: string
-          description: URL of the voiceprint audio file
-          example: https://example.com/voice.wav
-        model:
-          type:
-          - string
-          - 'null'
-          enum:
-          - precision-2
-          example: precision-2
-          default: precision-2
-        webhook:
-          type: string
-          description: Webhook URL to receive voiceprint results (optional)
-          example: https://example.com/webhook
-        webhookStatusOnly:
-          type: boolean
-          default: false
-          description: When true, webhook payload only includes jobId and status (excludes output). Useful for large payloads.
-          example: true
-      required:
-      - url
-    Voiceprint:
-      type: object
-      properties:
-        label:
-          type: string
-          maxLength: 100
-          pattern: ^(?!speaker_).*
-          description: Label for the speaker. Labels can't start with "SPEAKER_"
-          example: John Doe
-        voiceprint:
-          type: string
-          maxLength: 20000
-          format: string
-          description: Voiceprint of a speaker
-          example: U29tZUJhc2U2NERhdGE
-      required:
-      - label
-      - voiceprint
-    ValidationError:
-      type: object
-      properties:
-        field:
-          type: string
-          description: Field name
-          example: url
-        message:
-          type: string
-          description: Error message
-          example: Invalid URL
-      required:
-      - field
-      - message
-    TranscriptionConfiguration:
-      type: object
-      properties:
-        model:
-          type: string
-          default: parakeet-tdt-0.6b-v3
-          enum:
-          - parakeet-tdt-0.6b-v3
-          - faster-whisper-large-v3-turbo
-          description: "Transcription model to use. Supported languages depend on the chosen model:\n  - `parakeet-tdt-0.6b-v3`: Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian, Maltese, Polish, Portuguese, Romanian, Slovak, Slovenian, Spanish, Swedish, Russian or Ukrainian.\n  - `faster-whisper-large-v3-turbo`: Afrikaans, Albanian, Amharic, Arabic, Armenian, Assamese, Azerbaijani, Bashkir, Basque, Belarusian, Bengali, Bosnian, Breton, Bulgarian, Cantonese, Catalan, Chinese, Croatian, Czech, Danish, Dutch, English, Estonian, Faroese, Finnish, French, Galician, Georgian, German, Greek, Gujarati, HaitianCreole, Hausa, Hawaiian, Hebrew, Hindi, Hungarian, Icelandic, Indonesian, Italian, Japanese, Javanese, Kannada, Kazakh, Khmer, Korean, Lao, Latin, Latvian, Lingala, Lithuanian, Luxembourgish, Macedonian, Malagasy, Malay, Malayalam, Maltese, Maori, Marathi, Mongolian, Myanmar, Nepali, Norwegian, Nynorsk, Occitan, Pashto, Persian, Polish, Portuguese, Punjabi, Romanian, Russian, Sanskrit, Serbian, Shona, Sindhi, Sinhala, Slovak, Slovenian, Somali, Spanish, Sundanese, Swahili, Swedish, Tagalog, Tajik, Tamil, Tatar, Telugu, Thai, Tibetan, Turkish, Turkmen, Ukrainian, Urdu, Uzbek, Vietnamese, Welsh, Yiddish or Yoruba."
-          example: faster-whisper-large-v3-turbo
-    ValidationErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-          example: Invalid request
-        errors:
-          description: List of errors
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
-      required:
-      - message
-      - errors
-    MatchingOptions:
-      type: object
-      properties:
-        exclusive:
-          type:
-          - boolean
-          - 'null'
-          default: true
-          description: Prevent multiple speakers from being matched to the same voiceprint. Default to true
-        threshold:
-          type:
-          - number
-          - 'null'
-          default: 0
-          minimum: 0
-          maximum: 100
-          format: float
-          description: Prevent matching if confidence score is below this threshold. Value is between 0 and 100. Default is 0, meaning all voiceprints are matched
     DiarizeRequest:
       type: object
       properties:
@@ -307,6 +205,62 @@ components:
           - $ref: '#/components/schemas/TranscriptionConfiguration'
       required:
       - url
+    JobCreated:
+      type: object
+      properties:
+        jobId:
+          type: string
+          example: 3c8a89a5-dcc6-4edb-a75d-ffd64739674d
+          description: ID of the job
+        status:
+          type: string
+          description: Status of the job
+          example: created
+          enum:
+          - pending
+          - created
+          - succeeded
+          - canceled
+          - failed
+          - running
+        warning:
+          type: string
+          description: Warning message if any
+      required:
+      - jobId
+      - status
+    Voiceprint:
+      type: object
+      properties:
+        label:
+          type: string
+          maxLength: 100
+          pattern: ^(?!speaker_).*
+          description: Label for the speaker. Labels can't start with "SPEAKER_"
+          example: John Doe
+        voiceprint:
+          type: string
+          maxLength: 20000
+          format: string
+          description: Voiceprint of a speaker
+          example: U29tZUJhc2U2NERhdGE
+      required:
+      - label
+      - voiceprint
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+          description: Field name
+          example: url
+        message:
+          type: string
+          description: Error message
+          example: Invalid URL
+      required:
+      - field
+      - message
     IdentifyRequest:
       type: object
       properties:
@@ -376,30 +330,6 @@ components:
             $ref: '#/components/schemas/Voiceprint'
       required:
       - voiceprints
-    JobCreated:
-      type: object
-      properties:
-        jobId:
-          type: string
-          example: 3c8a89a5-dcc6-4edb-a75d-ffd64739674d
-          description: ID of the job
-        status:
-          type: string
-          description: Status of the job
-          example: created
-          enum:
-          - pending
-          - created
-          - succeeded
-          - canceled
-          - failed
-          - running
-        warning:
-          type: string
-          description: Warning message if any
-      required:
-      - jobId
-      - status
     ApiError:
       type: object
       properties:
@@ -414,6 +344,76 @@ components:
       required:
       - requestId
       - message
+    MatchingOptions:
+      type: object
+      properties:
+        exclusive:
+          type:
+          - boolean
+          - 'null'
+          default: true
+          description: Prevent multiple speakers from being matched to the same voiceprint. Default to true
+        threshold:
+          type:
+          - number
+          - 'null'
+          default: 0
+          minimum: 0
+          maximum: 100
+          format: float
+          description: Prevent matching if confidence score is below this threshold. Value is between 0 and 100. Default is 0, meaning all voiceprints are matched
+    VoiceprintRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          description: URL of the voiceprint audio file
+          example: https://example.com/voice.wav
+        model:
+          type:
+          - string
+          - 'null'
+          enum:
+          - precision-2
+          example: precision-2
+          default: precision-2
+        webhook:
+          type: string
+          description: Webhook URL to receive voiceprint results (optional)
+          example: https://example.com/webhook
+        webhookStatusOnly:
+          type: boolean
+          default: false
+          description: When true, webhook payload only includes jobId and status (excludes output). Useful for large payloads.
+          example: true
+      required:
+      - url
+    ValidationErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: Invalid request
+        errors:
+          description: List of errors
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+      required:
+      - message
+      - errors
+    TranscriptionConfiguration:
+      type: object
+      properties:
+        model:
+          type: string
+          default: parakeet-tdt-0.6b-v3
+          enum:
+          - parakeet-tdt-0.6b-v3
+          - faster-whisper-large-v3-turbo
+          description: "Transcription model to use. Supported languages depend on the chosen model:\n  - `parakeet-tdt-0.6b-v3`: Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian, Maltese, Polish, Portuguese, Romanian, Slovak, Slovenian, Spanish, Swedish, Russian or Ukrainian.\n  - `faster-whisper-large-v3-turbo`: Afrikaans, Albanian, Amharic, Arabic, Armenian, Assamese, Azerbaijani, Bashkir, Basque, Belarusian, Bengali, Bosnian, Breton, Bulgarian, Cantonese, Catalan, Chinese, Croatian, Czech, Danish, Dutch, English, Estonian, Faroese, Finnish, French, Galician, Georgian, German, Greek, Gujarati, HaitianCreole, Hausa, Hawaiian, Hebrew, Hindi, Hungarian, Icelandic, Indonesian, Italian, Japanese, Javanese, Kannada, Kazakh, Khmer, Korean, Lao, Latin, Latvian, Lingala, Lithuanian, Luxembourgish, Macedonian, Malagasy, Malay, Malayalam, Maltese, Maori, Marathi, Mongolian, Myanmar, Nepali, Norwegian, Nynorsk, Occitan, Pashto, Persian, Polish, Portuguese, Punjabi, Romanian, Russian, Sanskrit, Serbian, Shona, Sindhi, Sinhala, Slovak, Slovenian, Somali, Spanish, Sundanese, Swahili, Swedish, Tagalog, Tajik, Tamil, Tatar, Telugu, Thai, Tibetan, Turkish, Turkmen, Ukrainian, Urdu, Uzbek, Vietnamese, Welsh, Yiddish or Yoruba."
+          example: faster-whisper-large-v3-turbo
   securitySchemes:
     api-key:
       scheme: bearer
