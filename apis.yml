@@ -115,6 +115,8 @@ apis:
   humanURL: https://docs.pyannote.ai/
   baseURL: https://api.pyannote.ai
   tags:
+  - Job
+  tags_raw:
   - Jobs
   properties:
   - type: OpenAPI
@@ -132,7 +134,8 @@ apis:
   description: The Operations API from PyannoteAI — 3 operation(s) for operations.
   humanURL: https://docs.pyannote.ai/
   baseURL: https://api.pyannote.ai
-  tags:
+  tags: []
+  tags_raw:
   - Operations
   properties:
   - type: OpenAPI
@@ -150,7 +153,8 @@ apis:
   description: The Test API from PyannoteAI — 1 operation(s) for test.
   humanURL: https://docs.pyannote.ai/
   baseURL: https://api.pyannote.ai
-  tags:
+  tags: []
+  tags_raw:
   - Test
   properties:
   - type: OpenAPI
