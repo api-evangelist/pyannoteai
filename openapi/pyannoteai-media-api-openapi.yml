@@ -104,23 +104,6 @@ paths:
       - media:read
 components:
   schemas:
-    GetMediaUploadUrl:
-      type: object
-      properties:
-        url:
-          type: string
-          maxLength: 255
-          pattern: /^media:\/\/[a-zA-Z0-9\-_\.\/]+$/
-          description: The url should be in the form media://object-key where the object-key can be any alpha-numeric string. The object-key is unique to your account API token so there is no risk of collision with other users.
-      required:
-      - url
-    MediaResponse:
-      type: object
-      properties:
-        url:
-          type: string
-      required:
-      - url
     ValidationError:
       type: object
       properties:
@@ -135,20 +118,13 @@ components:
       required:
       - field
       - message
-    ApiError:
+    MediaResponse:
       type: object
       properties:
-        requestId:
+        url:
           type: string
-          description: Request ID
-          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
-        message:
-          type: string
-          description: Error message
-          example: Error message
       required:
-      - requestId
-      - message
+      - url
     ValidationErrorResponse:
       type: object
       properties:
@@ -164,6 +140,30 @@ components:
       required:
       - message
       - errors
+    ApiError:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Request ID
+          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
+        message:
+          type: string
+          description: Error message
+          example: Error message
+      required:
+      - requestId
+      - message
+    GetMediaUploadUrl:
+      type: object
+      properties:
+        url:
+          type: string
+          maxLength: 255
+          pattern: /^media:\/\/[a-zA-Z0-9\-_\.\/]+$/
+          description: The url should be in the form media://object-key where the object-key can be any alpha-numeric string. The object-key is unique to your account API token so there is no risk of collision with other users.
+      required:
+      - url
   securitySchemes:
     api-key:
       scheme: bearer

@@ -128,57 +128,79 @@ paths:
       - jobs:read
 components:
   schemas:
-    IdentifyJob:
+    ValidationError:
       type: object
       properties:
-        jobId:
+        field:
           type: string
-          description: Job ID to track the progress or get the results
-          example: fb16c565-f3f0-4402-a08c-9d44df0ccc7b
+          description: Field name
+          example: url
+        message:
+          type: string
+          description: Error message
+          example: Invalid URL
+      required:
+      - field
+      - message
+    JobListItem:
+      type: object
+      properties:
+        id:
+          type: string
         status:
-          description: Status of the job
-          allOf:
-          - $ref: '#/components/schemas/JobStatus'
+          type: string
         createdAt:
           format: date-time
           type: string
-          description: Date and time the job was created
-          example: '2024-02-20T12:00:00Z'
-        updatedAt:
-          format: date-time
-          type: string
-          description: Date and time the job was last updated
-          example: '2024-02-20T12:00:00Z'
-        output:
-          description: Output segments of an identification job, available for 24 hours after job completion
-          allOf:
-          - $ref: '#/components/schemas/IdentificationJobOutput'
-    Confidence:
+      required:
+      - id
+      - status
+      - createdAt
+    TranscriptionSegment:
       type: object
       properties:
-        score:
-          description: List of confidence scores for each sample. Values are between 0 and 100
-          example:
-          - 95
-          - 89
-          - 78
-          - 67
-          - 56
-          - 45
-          - 34
-          - 23
-          - 12
-          - 1
-          type: array
-          items:
-            type: number
-        resolution:
+        start:
           type: number
-          description: Resolution of the confidence scores. Value is number of seconds per sample
-          example: 0.02
+          description: Start time of the segment in seconds
+        end:
+          type: number
+          description: End time of the segment in seconds
+        text:
+          type: string
+          description: The transcribed speech content for this segment
+        speaker:
+          type: string
+          description: Speaker label
       required:
-      - score
-      - resolution
+      - start
+      - end
+      - text
+      - speaker
+    DiarizationSegment:
+      type: object
+      properties:
+        speaker:
+          type: string
+          description: Speaker label
+          example: SPEAKER_00
+        start:
+          type: number
+          description: Start time of the segment in seconds
+          example: 15
+        end:
+          type: number
+          description: End time of the segment in seconds
+          example: 30.5
+        confidence:
+          type: object
+          description: Confidence scores that this speech turn matches each diarization speaker. Only available if `turnLevelConfidence` is set to true when job is created.
+          example:
+            SPEAKER_00: 16
+            SPEAKER_01: 93
+      required:
+      - speaker
+      - start
+      - end
     IdentificationSegment:
       type: object
       properties:
@@ -213,59 +235,47 @@ components:
       required:
       - diarizationSpeaker
       - match
-    ValidationError:
+    ValidationErrorResponse:
       type: object
       properties:
-        field:
-          type: string
-          description: Field name
-          example: url
         message:
           type: string
           description: Error message
-          example: Invalid URL
+          example: Invalid request
+        errors:
+          description: List of errors
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
       required:
-      - field
       - message
-    ApiError:
+      - errors
+    Confidence:
       type: object
       properties:
-        requestId:
-          type: string
-          description: Request ID
-          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
-        message:
-          type: string
-          description: Error message
-          example: Error message
+        score:
+          description: List of confidence scores for each sample. Values are between 0 and 100
+          example:
+          - 95
+          - 89
+          - 78
+          - 67
+          - 56
+          - 45
+          - 34
+          - 23
+          - 12
+          - 1
+          type: array
+          items:
+            type: number
+        resolution:
+          type: number
+          description: Resolution of the confidence scores. Value is number of seconds per sample
+          example: 0.02
       required:
-      - requestId
-      - message
-    JobStatus:
-      type: string
-      enum:
-      - pending
-      - created
-      - succeeded
-      - canceled
-      - failed
-      - running
-      description: Status of the job
-    VoiceprintJobResults:
-      type: object
-      properties:
-        voiceprint:
-          type: string
-          description: Voiceprint of the audio. To be used for identification
-          example: aGVsbG8gd29ybGQ
-        warning:
-          type: string
-          description: Warning message if any
-        error:
-          type: string
-          description: Error message if any
-      required:
-      - voiceprint
+      - score
+      - resolution
     GetJobsResponseV2:
       type: object
       properties:
@@ -283,6 +293,173 @@ components:
       required:
       - items
       - nextCursor
+    IdentifyJob:
+      type: object
+      properties:
+        jobId:
+          type: string
+          description: Job ID to track the progress or get the results
+          example: fb16c565-f3f0-4402-a08c-9d44df0ccc7b
+        status:
+          description: Status of the job
+          allOf:
+          - $ref: '#/components/schemas/JobStatus'
+        createdAt:
+          format: date-time
+          type: string
+          description: Date and time the job was created
+          example: '2024-02-20T12:00:00Z'
+        updatedAt:
+          format: date-time
+          type: string
+          description: Date and time the job was last updated
+          example: '2024-02-20T12:00:00Z'
+        output:
+          description: Output segments of an identification job, available for 24 hours after job completion
+          allOf:
+          - $ref: '#/components/schemas/IdentificationJobOutput'
+    ApiError:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Request ID
+          example: 37a4c3a0-b034-4e8c-9ed9-76da6645544a
+        message:
+          type: string
+          description: Error message
+          example: Error message
+      required:
+      - requestId
+      - message
+    VoiceprintJob:
+      type: object
+      properties:
+        jobId:
+          type: string
+          description: Job ID to track the progress or get the results
+          example: fb16c565-f3f0-4402-a08c-9d44df0ccc7b
+        status:
+          description: Status of the job
+          allOf:
+          - $ref: '#/components/schemas/JobStatus'
+        createdAt:
+          format: date-time
+          type: string
+          description: Date and time the job was created
+          example: '2024-02-20T12:00:00Z'
+        updatedAt:
+          format: date-time
+          type: string
+          description: Date and time the job was last updated
+          example: '2024-02-20T12:00:00Z'
+        output:
+          description: Output of a voiceprint job, available for 24 hours after job completion
+          allOf:
+          - $ref: '#/components/schemas/VoiceprintJobResults'
+    IdentificationVoiceprint:
+      type: object
+      properties:
+        speaker:
+          type: string
+          description: Diarization speaker
+          example: SPEAKER_00
+        match:
+          type: string
+          description: Label of the voiceprint that was identified following the matching settings
+          example: Sam
+        confidence:
+          type: object
+          description: Confidence for each speaker label, as a dictionary of speaker label to confidence score
+          example:
+            Sam: 16
+            Rick: 24
+      required:
+      - speaker
+      - match
+      - confidence
+    VoiceprintJobResults:
+      type: object
+      properties:
+        voiceprint:
+          type: string
+          description: Voiceprint of the audio. To be used for identification
+          example: aGVsbG8gd29ybGQ
+        warning:
+          type: string
+          description: Warning message if any
+        error:
+          type: string
+          description: Error message if any
+      required:
+      - voiceprint
+    JobStatus:
+      type: string
+      enum:
+      - pending
+      - created
+      - succeeded
+      - canceled
+      - failed
+      - running
+      description: Status of the job
+    DiarizationJob:
+      type: object
+      properties:
+        jobId:
+          type: string
+          description: Job ID to track the progress or get the results
+          example: fb16c565-f3f0-4402-a08c-9d44df0ccc7b
+        status:
+          description: Status of the job
+          allOf:
+          - $ref: '#/components/schemas/JobStatus'
+        createdAt:
+          format: date-time
+          type: string
+          description: Date and time the job was created
+          example: '2024-02-20T12:00:00Z'
+        updatedAt:
+          format: date-time
+          type: string
+          description: Date and time the job was last updated
+          example: '2024-02-20T12:00:00Z'
+        output:
+          description: Output segments of a diarization, available for 24 hours after job completion
+          allOf:
+          - $ref: '#/components/schemas/DiarizationJobOutput'
+    IdentificationJobOutput:
+      type: object
+      properties:
+        diarization:
+          description: List of diarization segments
+          type: array
+          items:
+            $ref: '#/components/schemas/DiarizationSegment'
+        confidence:
+          description: Confidence scores details. Only returned if `confidence` is set to true when job is created
+          allOf:
+          - $ref: '#/components/schemas/Confidence'
+        exclusiveDiarization:
+          description: Exclusive diarization segments where only one speaker is active at a time. Only returned if `exclusive` is set to true when job is created.
+          type: array
+          items:
+            $ref: '#/components/schemas/DiarizationSegment'
+        error:
+          type: string
+          description: Error message if any
+        warning:
+          type: string
+          description: Warning message if any
+        identification:
+          description: List of identification segments
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentificationSegment'
+        voiceprints:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentificationVoiceprint'
     DiarizationJobOutput:
       type: object
       properties:
@@ -328,183 +505,6 @@ components:
           description: Warning message if any
       required:
       - diarization
-    IdentificationJobOutput:
-      type: object
-      properties:
-        diarization:
-          description: List of diarization segments
-          type: array
-          items:
-            $ref: '#/components/schemas/DiarizationSegment'
-        confidence:
-          description: Confidence scores details. Only returned if `confidence` is set to true when job is created
-          allOf:
-          - $ref: '#/components/schemas/Confidence'
-        exclusiveDiarization:
-          description: Exclusive diarization segments where only one speaker is active at a time. Only returned if `exclusive` is set to true when job is created.
-          type: array
-          items:
-            $ref: '#/components/schemas/DiarizationSegment'
-        error:
-          type: string
-          description: Error message if any
-        warning:
-          type: string
-          description: Warning message if any
-        identification:
-          description: List of identification segments
-          type: array
-          items:
-            $ref: '#/components/schemas/IdentificationSegment'
-        voiceprints:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdentificationVoiceprint'
-    DiarizationSegment:
-      type: object
-      properties:
-        speaker:
-          type: string
-          description: Speaker label
-          example: SPEAKER_00
-        start:
-          type: number
-          description: Start time of the segment in seconds
-          example: 15
-        end:
-          type: number
-          description: End time of the segment in seconds
-          example: 30.5
-        confidence:
-          type: object
-          description: Confidence scores that this speech turn matches each diarization speaker. Only available if `turnLevelConfidence` is set to true when job is created.
-          example:
-            SPEAKER_00: 16
-            SPEAKER_01: 93
-      required:
-      - speaker
-      - start
-      - end
-    ValidationErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-          example: Invalid request
-        errors:
-          description: List of errors
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
-      required:
-      - message
-      - errors
-    IdentificationVoiceprint:
-      type: object
-      properties:
-        speaker:
-          type: string
-          description: Diarization speaker
-          example: SPEAKER_00
-        match:
-          type: string
-          description: Label of the voiceprint that was identified following the matching settings
-          example: Sam
-        confidence:
-          type: object
-          description: Confidence for each speaker label, as a dictionary of speaker label to confidence score
-          example:
-            Sam: 16
-            Rick: 24
-      required:
-      - speaker
-      - match
-      - confidence
-    VoiceprintJob:
-      type: object
-      properties:
-        jobId:
-          type: string
-          description: Job ID to track the progress or get the results
-          example: fb16c565-f3f0-4402-a08c-9d44df0ccc7b
-        status:
-          description: Status of the job
-          allOf:
-          - $ref: '#/components/schemas/JobStatus'
-        createdAt:
-          format: date-time
-          type: string
-          description: Date and time the job was created
-          example: '2024-02-20T12:00:00Z'
-        updatedAt:
-          format: date-time
-          type: string
-          description: Date and time the job was last updated
-          example: '2024-02-20T12:00:00Z'
-        output:
-          description: Output of a voiceprint job, available for 24 hours after job completion
-          allOf:
-          - $ref: '#/components/schemas/VoiceprintJobResults'
-    DiarizationJob:
-      type: object
-      properties:
-        jobId:
-          type: string
-          description: Job ID to track the progress or get the results
-          example: fb16c565-f3f0-4402-a08c-9d44df0ccc7b
-        status:
-          description: Status of the job
-          allOf:
-          - $ref: '#/components/schemas/JobStatus'
-        createdAt:
-          format: date-time
-          type: string
-          description: Date and time the job was created
-          example: '2024-02-20T12:00:00Z'
-        updatedAt:
-          format: date-time
-          type: string
-          description: Date and time the job was last updated
-          example: '2024-02-20T12:00:00Z'
-        output:
-          description: Output segments of a diarization, available for 24 hours after job completion
-          allOf:
-          - $ref: '#/components/schemas/DiarizationJobOutput'
-    JobListItem:
-      type: object
-      properties:
-        id:
-          type: string
-        status:
-          type: string
-        createdAt:
-          format: date-time
-          type: string
-      required:
-      - id
-      - status
-      - createdAt
-    TranscriptionSegment:
-      type: object
-      properties:
-        start:
-          type: number
-          description: Start time of the segment in seconds
-        end:
-          type: number
-          description: End time of the segment in seconds
-        text:
-          type: string
-          description: The transcribed speech content for this segment
-        speaker:
-          type: string
-          description: Speaker label
-      required:
-      - start
-      - end
-      - text
-      - speaker
   securitySchemes:
     api-key:
       scheme: bearer

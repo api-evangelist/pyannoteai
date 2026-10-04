@@ -95,27 +95,6 @@ paths:
       - stream:read
 components:
   schemas:
-    StreamStatus:
-      type: string
-      enum:
-      - created
-      - running
-      - done
-      - error
-      description: Status of the stream
-    CreateStream:
-      type: object
-      properties: {}
-    StreamCreated:
-      type: object
-      properties:
-        id:
-          type: string
-        url:
-          type: string
-      required:
-      - id
-      - url
     ValidationError:
       type: object
       properties:
@@ -130,6 +109,39 @@ components:
       required:
       - field
       - message
+    StreamCreated:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+      required:
+      - id
+      - url
+    ValidationErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: Invalid request
+        errors:
+          description: List of errors
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+      required:
+      - message
+      - errors
+    StreamStatus:
+      type: string
+      enum:
+      - created
+      - running
+      - done
+      - error
+      description: Status of the stream
     ApiError:
       type: object
       properties:
@@ -144,6 +156,9 @@ components:
       required:
       - requestId
       - message
+    CreateStream:
+      type: object
+      properties: {}
     Stream:
       type: object
       properties:
@@ -171,21 +186,6 @@ components:
       - startedAt
       - completedAt
       - input
-    ValidationErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-          example: Invalid request
-        errors:
-          description: List of errors
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
-      required:
-      - message
-      - errors
   securitySchemes:
     api-key:
       scheme: bearer

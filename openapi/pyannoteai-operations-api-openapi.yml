@@ -138,97 +138,6 @@ paths:
       - jobs:write
 components:
   schemas:
-    DiarizeRequest:
-      type: object
-      properties:
-        url:
-          type: string
-          description: URL of the audio file to be processed
-          example: https://example.com/audio.wav
-        webhook:
-          type: string
-          description: Webhook URL to receive results when job is completed (optional)
-          example: https://example.com/webhook
-        webhookStatusOnly:
-          type: boolean
-          default: false
-          description: When true, webhook payload only includes jobId and status (excludes output). Useful for large payloads.
-          example: true
-        model:
-          type:
-          - string
-          - 'null'
-          enum:
-          - precision-2
-          - community-1
-          example: precision-2
-          default: precision-2
-        numSpeakers:
-          type: number
-          minimum: 1
-          description: Number of speakers. Only use if the number of speakers is known in advance. Number of speakers is detected automatically if not provided. Setting this value results in better overall diarization performance. In rare cases where we cannot honor this request (e.g. short files and large number of speakers), a warning will be added to the output. Equivalent to sending minSpeakers==maxSpeakers
-          example: 2
-        minSpeakers:
-          type: number
-          minimum: 1
-          description: Minimum number of speakers (must be <= maxSpeakers if both are set)
-          example: 1
-        maxSpeakers:
-          type: number
-          minimum: 1
-          description: Maximum number of speakers (must be >= minSpeakers if both are set)
-          example: 4
-        turnLevelConfidence:
-          type:
-          - boolean
-          - 'null'
-          default: false
-          description: Includes turn-level confidence values in the output.
-          example: true
-        exclusive:
-          type: boolean
-          default: false
-          description: Includes exclusive diarization values in the output in `exclusiveDiarization` key (equivalent to diarization but without overlapping speech).
-          example: true
-        confidence:
-          type: boolean
-          default: false
-          description: Include confidence values in the output. Output is considerably larger when this option is enabled. Output includes a list of confidence scores with a resolution.
-          example: true
-        transcription:
-          type: boolean
-          default: false
-          description: Enable speaker attributed transcription. Only available for the `precision-2` diarization model.
-        transcriptionConfig:
-          description: 'Transcription configuration, if `transcription: true`'
-          allOf:
-          - $ref: '#/components/schemas/TranscriptionConfiguration'
-      required:
-      - url
-    JobCreated:
-      type: object
-      properties:
-        jobId:
-          type: string
-          example: 3c8a89a5-dcc6-4edb-a75d-ffd64739674d
-          description: ID of the job
-        status:
-          type: string
-          description: Status of the job
-          example: created
-          enum:
-          - pending
-          - created
-          - succeeded
-          - canceled
-          - failed
-          - running
-        warning:
-          type: string
-          description: Warning message if any
-      required:
-      - jobId
-      - status
     Voiceprint:
       type: object
       properties:
@@ -261,6 +170,32 @@ components:
       required:
       - field
       - message
+    VoiceprintRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          description: URL of the voiceprint audio file
+          example: https://example.com/voice.wav
+        model:
+          type:
+          - string
+          - 'null'
+          enum:
+          - precision-2
+          example: precision-2
+          default: precision-2
+        webhook:
+          type: string
+          description: Webhook URL to receive voiceprint results (optional)
+          example: https://example.com/webhook
+        webhookStatusOnly:
+          type: boolean
+          default: false
+          description: When true, webhook payload only includes jobId and status (excludes output). Useful for large payloads.
+          example: true
+      required:
+      - url
     IdentifyRequest:
       type: object
       properties:
@@ -330,6 +265,123 @@ components:
             $ref: '#/components/schemas/Voiceprint'
       required:
       - voiceprints
+    TranscriptionConfiguration:
+      type: object
+      properties:
+        model:
+          type: string
+          default: parakeet-tdt-0.6b-v3
+          enum:
+          - parakeet-tdt-0.6b-v3
+          - faster-whisper-large-v3-turbo
+          description: "Transcription model to use. Supported languages depend on the chosen model:\n  - `parakeet-tdt-0.6b-v3`: Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian, Maltese, Polish, Portuguese, Romanian, Slovak, Slovenian, Spanish, Swedish, Russian or Ukrainian.\n  - `faster-whisper-large-v3-turbo`: Afrikaans, Albanian, Amharic, Arabic, Armenian, Assamese, Azerbaijani, Bashkir, Basque, Belarusian, Bengali, Bosnian, Breton, Bulgarian, Cantonese, Catalan, Chinese, Croatian, Czech, Danish, Dutch, English, Estonian, Faroese, Finnish, French, Galician, Georgian, German, Greek, Gujarati, HaitianCreole, Hausa, Hawaiian, Hebrew, Hindi, Hungarian, Icelandic, Indonesian, Italian, Japanese, Javanese, Kannada, Kazakh, Khmer, Korean, Lao, Latin, Latvian, Lingala, Lithuanian, Luxembourgish, Macedonian, Malagasy, Malay, Malayalam, Maltese, Maori, Marathi, Mongolian, Myanmar, Nepali, Norwegian, Nynorsk, Occitan, Pashto, Persian, Polish, Portuguese, Punjabi, Romanian, Russian, Sanskrit, Serbian, Shona, Sindhi, Sinhala, Slovak, Slovenian, Somali, Spanish, Sundanese, Swahili, Swedish, Tagalog, Tajik, Tamil, Tatar, Telugu, Thai, Tibetan, Turkish, Turkmen, Ukrainian, Urdu, Uzbek, Vietnamese, Welsh, Yiddish or Yoruba."
+          example: faster-whisper-large-v3-turbo
+    JobCreated:
+      type: object
+      properties:
+        jobId:
+          type: string
+          example: 3c8a89a5-dcc6-4edb-a75d-ffd64739674d
+          description: ID of the job
+        status:
+          type: string
+          description: Status of the job
+          example: created
+          enum:
+          - pending
+          - created
+          - succeeded
+          - canceled
+          - failed
+          - running
+        warning:
+          type: string
+          description: Warning message if any
+      required:
+      - jobId
+      - status
+    DiarizeRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          description: URL of the audio file to be processed
+          example: https://example.com/audio.wav
+        webhook:
+          type: string
+          description: Webhook URL to receive results when job is completed (optional)
+          example: https://example.com/webhook
+        webhookStatusOnly:
+          type: boolean
+          default: false
+          description: When true, webhook payload only includes jobId and status (excludes output). Useful for large payloads.
+          example: true
+        model:
+          type:
+          - string
+          - 'null'
+          enum:
+          - precision-2
+          - community-1
+          example: precision-2
+          default: precision-2
+        numSpeakers:
+          type: number
+          minimum: 1
+          description: Number of speakers. Only use if the number of speakers is known in advance. Number of speakers is detected automatically if not provided. Setting this value results in better overall diarization performance. In rare cases where we cannot honor this request (e.g. short files and large number of speakers), a warning will be added to the output. Equivalent to sending minSpeakers==maxSpeakers
+          example: 2
+        minSpeakers:
+          type: number
+          minimum: 1
+          description: Minimum number of speakers (must be <= maxSpeakers if both are set)
+          example: 1
+        maxSpeakers:
+          type: number
+          minimum: 1
+          description: Maximum number of speakers (must be >= minSpeakers if both are set)
+          example: 4
+        turnLevelConfidence:
+          type:
+          - boolean
+          - 'null'
+          default: false
+          description: Includes turn-level confidence values in the output.
+          example: true
+        exclusive:
+          type: boolean
+          default: false
+          description: Includes exclusive diarization values in the output in `exclusiveDiarization` key (equivalent to diarization but without overlapping speech).
+          example: true
+        confidence:
+          type: boolean
+          default: false
+          description: Include confidence values in the output. Output is considerably larger when this option is enabled. Output includes a list of confidence scores with a resolution.
+          example: true
+        transcription:
+          type: boolean
+          default: false
+          description: Enable speaker attributed transcription. Only available for the `precision-2` diarization model.
+        transcriptionConfig:
+          description: 'Transcription configuration, if `transcription: true`'
+          allOf:
+          - $ref: '#/components/schemas/TranscriptionConfiguration'
+      required:
+      - url
+    ValidationErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: Invalid request
+        errors:
+          description: List of errors
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+      required:
+      - message
+      - errors
     ApiError:
       type: object
       properties:
@@ -362,58 +414,6 @@ components:
           maximum: 100
           format: float
           description: Prevent matching if confidence score is below this threshold. Value is between 0 and 100. Default is 0, meaning all voiceprints are matched
-    VoiceprintRequest:
-      type: object
-      properties:
-        url:
-          type: string
-          description: URL of the voiceprint audio file
-          example: https://example.com/voice.wav
-        model:
-          type:
-          - string
-          - 'null'
-          enum:
-          - precision-2
-          example: precision-2
-          default: precision-2
-        webhook:
-          type: string
-          description: Webhook URL to receive voiceprint results (optional)
-          example: https://example.com/webhook
-        webhookStatusOnly:
-          type: boolean
-          default: false
-          description: When true, webhook payload only includes jobId and status (excludes output). Useful for large payloads.
-          example: true
-      required:
-      - url
-    ValidationErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-          example: Invalid request
-        errors:
-          description: List of errors
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
-      required:
-      - message
-      - errors
-    TranscriptionConfiguration:
-      type: object
-      properties:
-        model:
-          type: string
-          default: parakeet-tdt-0.6b-v3
-          enum:
-          - parakeet-tdt-0.6b-v3
-          - faster-whisper-large-v3-turbo
-          description: "Transcription model to use. Supported languages depend on the chosen model:\n  - `parakeet-tdt-0.6b-v3`: Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian, Maltese, Polish, Portuguese, Romanian, Slovak, Slovenian, Spanish, Swedish, Russian or Ukrainian.\n  - `faster-whisper-large-v3-turbo`: Afrikaans, Albanian, Amharic, Arabic, Armenian, Assamese, Azerbaijani, Bashkir, Basque, Belarusian, Bengali, Bosnian, Breton, Bulgarian, Cantonese, Catalan, Chinese, Croatian, Czech, Danish, Dutch, English, Estonian, Faroese, Finnish, French, Galician, Georgian, German, Greek, Gujarati, HaitianCreole, Hausa, Hawaiian, Hebrew, Hindi, Hungarian, Icelandic, Indonesian, Italian, Japanese, Javanese, Kannada, Kazakh, Khmer, Korean, Lao, Latin, Latvian, Lingala, Lithuanian, Luxembourgish, Macedonian, Malagasy, Malay, Malayalam, Maltese, Maori, Marathi, Mongolian, Myanmar, Nepali, Norwegian, Nynorsk, Occitan, Pashto, Persian, Polish, Portuguese, Punjabi, Romanian, Russian, Sanskrit, Serbian, Shona, Sindhi, Sinhala, Slovak, Slovenian, Somali, Spanish, Sundanese, Swahili, Swedish, Tagalog, Tajik, Tamil, Tatar, Telugu, Thai, Tibetan, Turkish, Turkmen, Ukrainian, Urdu, Uzbek, Vietnamese, Welsh, Yiddish or Yoruba."
-          example: faster-whisper-large-v3-turbo
   securitySchemes:
     api-key:
       scheme: bearer
