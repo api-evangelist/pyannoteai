@@ -100,3 +100,30 @@ notes: >-
   Self-serve pricing is fully published with real numbers for two of three tiers, which is unusually
   transparent for an AI infrastructure vendor. The dashboard, not the marketing page, is named as the
   authoritative source for current per-unit rates.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - hybrid
+  units: []
+  plans:
+  - name: Developer
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Starter
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
