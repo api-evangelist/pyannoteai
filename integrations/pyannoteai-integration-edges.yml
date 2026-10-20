@@ -1,25 +1,4 @@
 edges:
-- partner_name: Hugging Face Hub
-  partner: hugging-face
-  partner_match: framework
-  channel: partner-built
-  direction: partner-built
-  type: coverage
-  relationship: system-coverage
-  evidence: https://huggingface.co/pyannote
-  coverage_role:
-  - stt
-  framework_signals:
-    packages:
-    - huggingface.co/pyannote
-    roles:
-    - stt
-    vendor_domain: pyannote.ai
-    hub_org_models_in_top_1000: 6
-    hub_org_downloads: 13336346
-  matched_by: verified-domain-table
-  detected_by: sweep-voice-ai.py
-  first_seen: '2026-10-15'
 - partner_name: A2A protocol (own Agent Card)
   partner: null
   partner_match: register
@@ -50,8 +29,29 @@ edges:
     matched_domain: pyannote.ai
     matched_by: own-domain
     detected_by: sweep-ai-agents.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-ai-agents.py
+  first_seen: '2026-10-15'
+- partner_name: Hugging Face Hub
+  partner: hugging-face
+  partner_match: framework
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: system-coverage
+  evidence: https://huggingface.co/pyannote
+  coverage_role:
+  - stt
+  framework_signals:
+    packages:
+    - huggingface.co/pyannote
+    roles:
+    - stt
+    vendor_domain: pyannote.ai
+    hub_org_models_in_top_1000: 6
+    hub_org_downloads: 12755449
+  matched_by: verified-domain-table
+  detected_by: sweep-voice-ai.py
   first_seen: '2026-10-15'
 generated: '2026-10-15'
 method: searched
