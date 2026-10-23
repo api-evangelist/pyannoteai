@@ -53,10 +53,30 @@ edges:
   matched_by: verified-domain-table
   detected_by: sweep-voice-ai.py
   first_seen: '2026-10-15'
+- partner_name: Hugging Face (hugging-face-hub)
+  partner: hugging-face
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: hugging-face-hub
+  evidence: https://huggingface.co/pyannote
+  mirror_of: hugging-face/integrations/hugging-face-integration-edges.yml
+  apps:
+  - pyannote
+  listing_count: 1
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Hugging Face Hub spaces
+  badges:
+  - Verified publisher (Hugging Face verified organisation)
 generated: '2026-10-15'
 method: searched
 checked:
 - https://a2aregistry.org/api/agents
 - https://huggingface.co/models?pipeline_tag=text-to-speech
+- hugging-face/integrations/hugging-face-integration-edges.yml
 source:
 - https://a2aregistry.org/api/agents
