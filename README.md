@@ -64,6 +64,143 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-PyannoteAI is a company surfaced as a portfolio company of serena and added to the API Evangelist network as a stub for enrichment. Sector: ai-data. This profile is a lead awaiting the enrichment pipeline.
+pyannoteAI builds speaker intelligence infrastructure for voice AI: a hosted REST and WebSocket API that answers "who spoke when" (speaker diarization) and "who is speaking" (speaker identification via voiceprints) for both batch audio files and live streams. The company commercializes the widely adopted open-source pyannote.audio library, offering batch diarization, real-time streaming diarization over a WebSocket gateway, voiceprint enrollment and matching, and speech-to-text orchestration that returns speaker-attributed transcripts in a single call. Developers authenticate with a bearer API key, submit asynchronous jobs, and receive results by polling or signed webhooks.
 
-Source: portfolio company of [serena](https://github.com/api-evangelist/serena) — https://pyannote.ai/
+**Areas:** Company · Ai Data · Speech Recognition · Speaker Diarization · Audio · Voice AI · Machine Learning · Transcription · Streaming · Webhook · Real-Time · A2A
+
+## PyannoteAI on APIs.io
+
+Everything profiled for PyannoteAI is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/pyannoteai/](https://apis.io/providers/pyannoteai/)** — or go straight to one of the APIs or properties below.
+
+### APIs (5)
+
+- [PyannoteAI Media API](https://apis.io/apis/pyannoteai/pyannoteai-media-api/) — The Media API from PyannoteAI — 2 operation(s) for media.
+- [PyannoteAI Streaming API](https://apis.io/apis/pyannoteai/pyannoteai-streaming-api/) — The Streaming API from PyannoteAI — 2 operation(s) for streaming.
+- [PyannoteAI Jobs API](https://apis.io/apis/pyannoteai/pyannoteai-jobs-api/) — The Jobs API from PyannoteAI — 2 operation(s) for jobs.
+- [PyannoteAI Operations API](https://apis.io/apis/pyannoteai/pyannoteai-operations-api/) — The Operations API from PyannoteAI — 3 operation(s) for operations.
+- [PyannoteAI Test API](https://apis.io/apis/pyannoteai/pyannoteai-test-api/) — The Test API from PyannoteAI — 1 operation(s) for test.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (2)
+
+Event-driven and webhook contracts.
+
+- [pyannoteAI WebSocket Gateway API](https://apis.io/asyncapis/pyannoteai/pyannoteai-streaming-asyncapi/)
+- [Pyannoteai Webhooks](https://apis.io/asyncapis/pyannoteai/pyannoteai-webhooks/)
+
+#### Event channels (1)
+
+Individual events and webhooks the provider emits.
+
+- [<generated url from /v1/live endpoint>](https://apis.io/channels/pyannoteai/generated-url-from-v1-live-endpoint/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [pyannoteAI](https://apis.io/servers/pyannoteai/pyannoteai/)
+
+#### Overlays (3)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Pyannoteai Api Api Overlay](https://apis.io/overlays/pyannoteai/pyannoteai-api-api-overlay/)
+- [Pyannoteai Media Api Overlay](https://apis.io/overlays/pyannoteai/pyannoteai-media-api-overlay/)
+- [Pyannoteai Streaming Api Overlay](https://apis.io/overlays/pyannoteai/pyannoteai-streaming-api-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Pyannoteai Authentication](https://apis.io/security/pyannoteai/pyannoteai-authentication/)
+- [Pyannoteai Domain Security](https://apis.io/security/pyannoteai/pyannoteai-domain-security/)
+- [Pyannoteai Trust Center](https://apis.io/security/pyannoteai/pyannoteai-trust-center/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Pyannoteai Plans Pricing](https://apis.io/plans/pyannoteai/pyannoteai-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Pyannoteai Rate Limits](https://apis.io/rate-limits/pyannoteai/pyannoteai-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://pyannote.ai/)
+- [Documentation](https://docs.pyannote.ai/)
+- [Getting started](https://docs.pyannote.ai/quickstart)
+- [API reference](https://docs.pyannote.ai/api-reference/test)
+- [Pricing](https://www.pyannote.ai/pricing)
+- [Sign up](https://dashboard.pyannote.ai)
+- [Support](https://docs.pyannote.ai/support/faqs)
+- [Blog](https://www.pyannote.ai/blog)
+- [Compliance](https://trust.pyannote.ai)
+- [Trust centre](https://trust.pyannote.ai)
+- [Terms of service](https://pyannote.ai/terms-of-use)
+- [Privacy policy](https://pyannote.ai/privacy-policy)
+- [GitHub](https://github.com/pyannote)
+- [Status](https://status.pyannote.ai)
+
+## API Evangelist rating
+
+**Kin Score 61.2** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 53.7 |
+| Contract governance | 4.5 |
+| Operational transparency | 57.9 |
+| Developer ergonomics | 78.6 |
+| Access clarity | 78.9 |
+
+**Agent readiness 37.4** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | platform (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | yes |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | paginated |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 27.3** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/pyannoteai/](https://apis.io/providers/pyannoteai/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for PyannoteAI: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/pyannoteai/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
